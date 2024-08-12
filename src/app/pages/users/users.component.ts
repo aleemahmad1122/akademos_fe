@@ -23,7 +23,7 @@ export class UsersComponent implements OnInit {
   userForm = new FormGroup({
     _id: new FormControl(null),
     name: new FormControl(''),
-    email: new FormControl('',Validators.required),
+    email: new FormControl('', Validators.required),
     gender: new FormControl('Male'),
     age: new FormControl(Validators.required),
     address: new FormControl(''),
@@ -159,7 +159,7 @@ export class UsersComponent implements OnInit {
       }
 
 
-      this.service.updateUser(this.userForm.value._id, this.userForm.value).subscribe(data => {
+      this.service.updateUser(this.userForm.value._id, { firstName: this.userForm.value.name, ...this.userForm.value }).subscribe(data => {
         console.log(data)
         if (data.status == 1) {
           document.getElementById('close').click()
@@ -215,19 +215,19 @@ export class UsersComponent implements OnInit {
   }
 
 
-  downloadUser(id){
-    this.service.download(id).subscribe(res=>{
+  downloadUser(id) {
+    this.service.download(id).subscribe(res => {
       console.log(res)
-         const blob = new Blob([res], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const blob = new Blob([res], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
       const link = document.createElement('a');
       link.href = window.URL.createObjectURL(blob);
       link.download = 'user.xlsx';
       link.click();
-        
-    },(error) => {
+
+    }, (error) => {
       this.toastr.error(error, 'Error', {
         positionClass: 'toast-bottom-right'
-      });      
+      });
     })
 
   }

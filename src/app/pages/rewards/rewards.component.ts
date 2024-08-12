@@ -14,6 +14,11 @@ export class RewardsComponent implements OnInit {
   @ViewChild('fileInput', { static: false }) fileInput!: ElementRef;
   searchText = '';
   base64Images: string[] = [];
+  fullName: any = null;
+  paymentMethod: any = null;
+  phone: any = null;
+  points: any = null;
+
 
   triggerFileInput(): void {
     this.fileInput.nativeElement.click();
@@ -42,11 +47,7 @@ export class RewardsComponent implements OnInit {
 
   loader = false;
   reward = {
-    name: '',
-    desc: '',
-    images: [],
-    rewardPoints: 0,
-    status: '1'
+    rewardPoints: 0
   };
   editrewarddata = {
     _id: '',
@@ -240,40 +241,41 @@ export class RewardsComponent implements OnInit {
 
   editreward(data) {
 
+    this.fullName = data.fullName
+    this.paymentMethod = data.paymentMethod
+    this.phone = data.phone
+    this.points = data.points
+
     this.editrewarddata._id = data._id
     this.editrewarddata.name = data.name
     this.editrewarddata.desc = data.desc
     this.editrewarddata.images = data.images;
-    this.editrewarddata.rewardPoints = data.rewardPoints;
+    this.editrewarddata.rewardPoints = data.points;
     this.editrewarddata.status = data.status;
 
   }
 
-  updatereward() {
-    console.log(this.editrewarddata)
-    if (this.editrewarddata.name.trim() !== '' && this.editrewarddata.desc.trim() !== '' && this.editrewarddata.rewardPoints !== 0 && this.editrewarddata.images.length !== 0) {
 
-      this.service.updateReward(this.editrewarddata._id, this.reward).subscribe(data => {
-        // console.log(data)
-        if (data.status == 1) {
-          this.close()
-          this.toastr.success('Reward is updated', 'Success !', {
-            positionClass: 'toast-bottom-right'
-          });
-          this.getAllReward();
-        }
-        else {
-          this.toastr.error('', 'Something went wrong', {
-            positionClass: 'toast-bottom-right'
-          });
-        }
-      })
-    } else {
-      this.toastr.error('Please fill all the fields', 'Invalid Form', {
-        positionClass: 'toast-bottom-right'
-      });
-    }
+  rewardPointsInvalid(): boolean {
+    const points = this.editrewarddata.rewardPoints;
+    return points === null || points <= 0 || points > this.points;
   }
+  updatereward() {
+    console.log(this.editrewarddata.rewardPoints)
 
-
+    this.surveyService.updateReward(this.editrewarddata._id, { points: this.editrewarddata.rewardPoints }).subscribe(_ => {
+      if (_.status == 1) {
+        this.close()
+        this.toastr.success('Reward is updated', 'Success !', {
+          positionClass: 'toast-bottom-right'
+        });
+        this.getAllReward();
+      }
+      else {
+        this.toastr.error('', 'Something went wrong', {
+          positionClass: 'toast-bottom-right'
+        });
+      }
+    })
+  }
 }

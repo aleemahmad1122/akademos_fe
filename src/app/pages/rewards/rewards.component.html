@@ -135,20 +135,45 @@
 
       <div class="d-flex justify-content-center ">
         <div class="form-group" style="width: 90%;">
-          <h4>Add Reward</h4>
-          <label for="name">Name</label>
+          <h4>Update</h4>
+          <!-- <label for="name">Name</label>
           <input [(ngModel)]="editrewarddata.name" style="margin-bottom: 10px;" type="text" class="form-control"
             placeholder="First Name">
 
           <label for="desc">Description</label>
           <input [(ngModel)]="editrewarddata.desc" style="margin-bottom: 10px;" type="text" class="form-control"
-            placeholder="Enter description">
+            placeholder="Enter description"> -->
 
-          <label for="desc">Reward Points</label>
+          <div>
+            <label style="font-weight: bold;" for="desc">Full Name: </label>
+            <span>{{" "}}{{ fullName || "N/A"}}</span>
+          </div>
+
+          <div>
+            <label style="font-weight: bold;" for="desc">Number: </label>
+            <span>{{" "}}{{ phone || "N/A"}}</span>
+          </div>
+
+
+          <div>
+            <label style="font-weight: bold;" for="desc">Paymen tMethod: </label>
+            <span>{{" "}}{{ paymentMethod || "N/A"}}</span>
+          </div>
+
+
+          <div>
+            <label style="font-weight: bold;" for="desc">Total Point: </label>
+            <span>{{" "}}{{ points || "N/A"}}</span>
+          </div>
+
+          <label style="font-weight: bold;" for="desc">Pay</label>
           <input [(ngModel)]="editrewarddata.rewardPoints" style="margin-bottom: 10px;" type="number"
-            class="form-control" placeholder="Enter description">
+            class="form-control" placeholder="Enter points" min="0.01" [max]="points" step="0.01" required>
+          <div *ngIf="rewardPointsInvalid()" style="color: red;">
+            Please enter a value greater than 0 and less than {{points}}.
+          </div>
 
-          <label for="email">Edit Images</label>
+          <!-- <label for="email">Edit Images</label>
           <div>
 
 
@@ -193,24 +218,24 @@
 
             </div>
 
-          </div>
+          </div> -->
 
 
-          <label for="email">Status</label>
+          <!-- <label for="email">Status</label>
           <div class="input-group mb-3">
             <select class="custom-select" [(ngModel)]="editrewarddata.status" id="inputGroupSelect02">
               <option value="1">Active</option>
               <option value="0">InActive</option>
             </select>
 
-          </div>
+          </div> -->
 
 
 
           <button style="float: right;margin-bottom: 20px;margin-top: 30px;" type="button" class="btn btn-danger"
             data-dismiss="modal" (click)="close()">Close</button>
           <button style="float: right;margin-bottom: 20px;margin-top: 30px;" type="button" class="btn btn-success"
-            data-dismiss="modal" (click)="updatereward()">Update</button>
+            data-dismiss="modal" (click)="updatereward()" [disabled]="rewardPointsInvalid()">Update</button>
         </div>
       </div>
 

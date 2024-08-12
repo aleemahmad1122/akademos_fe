@@ -53,6 +53,10 @@ export class SurveyService {
   rewardsList(): Observable<any> {
     return this.http.get(this.url + 'userresponse/get-all-user-rewards')
   }
+
+  updateReward(id, data): Observable<any> {
+    return this.http.post(this.url + 'userresponse/update-user-reward/' + id, data)
+  }
   // reponse list
   responseList(surveyId): Observable<any> {
     return this.http.get(this.url + 'userresponse/get-user-responseBySurveyId/' + surveyId)
@@ -62,6 +66,10 @@ export class SurveyService {
   }
 
   updateUserResponse(id, data): Observable<any> {
+    return this.http.post(this.url + 'userresponse/update/' + id, data)
+  }
+
+  updateUserReward(id, data): Observable<any> {
     return this.http.post(this.url + 'userresponse/update/' + id, data)
   }
 
