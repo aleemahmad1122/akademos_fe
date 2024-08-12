@@ -1,0 +1,20 @@
+<div class="sidebar-wrapper">
+  <div class=ion-justify-content-center>
+
+    <img src="assets/images/logo.png" alt="" height="150px"
+      style="display: block; margin-top: 20px; margin-right: 20px; padding: 30px;">
+
+
+  </div>
+  <ul class="nav">
+    <span *ngFor="let menuItem of routes">
+      <li routerLinkActive="active" class="{{menuItem.class}}" *ngIf="menuItem.isAdmin">
+        <a [routerLink]="[menuItem.path]">
+          <i class="nc-icon {{menuItem.icon}}" style="color: white;"></i>
+          <p>{{menuItem.title}}</p>
+        </a>
+      </li>
+    </span>
+
+  </ul>
+</div>

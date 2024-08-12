@@ -1,0 +1,18 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../out-tsc/app",
+    "baseUrl": "",
+    "target": "es2016",
+    "types": ["googlemaps"],
+    "lib": [
+        "es2017",
+        "dom",
+        "scripthost"
+    ],
+  },
+  "exclude": [
+    "test.ts",
+    "**/*.spec.ts"
+  ]
+}

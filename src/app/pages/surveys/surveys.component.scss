@@ -1,0 +1,79 @@
+textarea {
+  outline: none !important;
+  border:1px solid #DDDDDD;
+  color: #444444;
+}
+.tabledata::-webkit-scrollbar {
+  width: 9px; /* width of the entire scrollbar */
+  display: none; //for displaying none//
+}
+
+// .tabledata::-webkit-scrollbar-track {
+//   background: orange; /* color of the tracking area */
+// }
+
+.tabledata::-webkit-scrollbar-thumb {
+  background-color: #656768; /* color of the scroll thumb */
+  border-radius: 10px; /* roundness of the scroll thumb */
+}
+// .tabledata::-webkit-scrollbar {
+//   display: none;
+// }
+.tabledata::-webkit-scrollbar-corner {
+  display: none;
+}
+  
+
+// #inputAutofill{
+//   position: absolute;
+//       z-index: 9999;
+//       display: none;
+// }
+
+// .tabledata::-webkit-scrollbar-button {
+//   background-color: #3a3b3c;
+// }
+// table {
+  
+//   // table-layout: /;
+//   height: 200px;
+// }
+.input-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.item-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.item input[type="number"] {
+  width: 60px;
+}
+
+.item button {
+  padding: 5px 10px;
+}
+
+@media (max-width: 600px) {
+  .item-list {
+    flex-direction: column;
+  }
+
+  .item {
+    width: 100%;
+  }
+}

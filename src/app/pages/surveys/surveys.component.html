@@ -1,0 +1,311 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="row ">
+                    <div class="col-md-4 col-lg-3 col-sm-12">
+                        <h4 class="card-title float-left">List of Surveys</h4>
+
+                    </div>
+
+
+
+
+
+                    <div class="col-md-8 col-lg-9 col-sm-12 d-flex align-items-center justify-content-between"
+                        style="flex-wrap:wrap; gap: 8px; ">
+                        <div class="search-hero " style="width:70%;display: inline-block;margin-top: 10px;">
+                            <form>
+                                <input class="form-control" type="text" name="search" style="height: 37px;"
+                                    [(ngModel)]="searchText" autocomplete="off"
+                                    placeholder="Search by survey name, description...">
+                            </form>
+                        </div>
+
+                        <div style="flex: auto;">
+                            <label for="status">Status</label>
+                            <div class="input-group mb-3">
+                                <select class="custom-select" id="inputGroupSelect02" [(ngModel)]="selectedStatus"
+                                    (change)="onStatusChange()">
+                                    <option value="">Select by Status</option>
+                                    <option value="all">All</option>
+                                    <option value="1">Active</option>
+                                    <option value="0">Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+
+                        <button type="button" (click)="setMap()" class="btn btn-success float-right" data-toggle="modal"
+                            data-target="#addModal" data-backdrop="static">Add Survey</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div>
+                    <div *ngIf="loader" class="text-center container">
+                        <i class="fa fa-spin fa-spinner fa-5x"></i> <br />
+                    </div>
+                    <div class="tabledata" style="overflow-x: scroll;">
+
+                        <table class="table">
+                            <thead>
+
+                                <th>#</th>
+                                <th>Survey Name</th>
+                                <th>Description</th>
+                                <th>No. of people who filled</th>
+                                <th>Responses</th>
+                                <th>Added on</th>
+                                <th>Status</th>
+                                <th class="text-right">Action</th>
+                            </thead>
+                            <tbody *ngFor="let data of surveyList | filter:searchText; index as i">
+                                <tr>
+                                    <td>{{i+1}}</td>
+                                    <td *ngIf="data.projectName!=''">{{data.projectName}}</td>
+                                    <td *ngIf="data.projectName==''">-</td>
+                                    <td *ngIf="data.desc!=''"
+                                        style="width: 300px;text-overflow: ellipsis;overflow: hidden;">{{data.desc}}
+                                    </td>
+                                    <td *ngIf="data.desc==''">-</td>
+                                    <td *ngIf="data.desc!=''">{{data.surveyCount}}</td>
+                                    <td *ngIf="data.desc==''">-</td>
+                                    <td><button [routerLink]="['/user-response/'+ data._id]"
+                                            class="btn btn-success btn-sm"
+                                            style="background-color: #28a745;">Responses</button></td>
+                                    <td>{{data.createdAt | date: 'short'}}</td>
+                                    <td>
+                                        <h6 *ngIf="data.status==1" class="text-success">Active</h6>
+                                        <h6 *ngIf="data.status==0" class="text-danger">InActive</h6>
+                                    </td>
+                                    <td class="text-right">
+                                        <!-- [routerLink]="['/surveydetail/false/' + data._id]" -->
+                                        <img [routerLink]="['/surveydetail/false/' + data._id]" role="button"
+                                            src="assets/images/eye.png" alt="" height="22px"
+                                            style="padding-left: 15px;">
+                                        <img role="button" [routerLink]="['/surveydetail/true/' + data._id]"
+                                            src="assets/images/edit.png" alt="" height="22px"
+                                            style="padding-left: 15px;">
+                                        <img role="button" (click)="deleteSurvey(data._id)" src="assets/delete.png"
+                                            alt="" height="18px" style="padding-left: 15px;">
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+            <p>{{error}}</p>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade " id="addModal" tabindex="-1" role="dialog" data-backdrop="static"
+    aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <h5 *ngIf="selection == '0'" (click)="setMap()" class="modal-title" id="exampleModalLongTitle">Add
+                    Survey</h5>
+                <div class="d-flex align-items-center">
+
+                    <img *ngIf="selection != '0'" (click)="selection = 0;questionType = ''"
+                        src="assets/images/arrowback.png" style="cursor: pointer;" height="20px" alt="" srcset="">
+                    <h5 class="modal-title" id="exampleModalLongTitle">{{questionType}}</h5>
+                </div>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="" [formGroup]="surveyForm" (ngSubmit)="createSurvey()">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="userName">Project Name</label>
+                                <input formControlName="projectName" style="margin-bottom: 10px;" type="text"
+                                    class="form-control" placeholder="Project Name">
+
+                            </div>
+                            <div class="col-md-12">
+                                <h6>Select Deadline Date</h6>
+                                <div class="input-group mb-3">
+                                    <input [formControl]="dateInput" formControlName="expirationDate" type="date"
+                                        class="form-control" style="border: 1px solid #DDDDDD;"
+                                        placeholder="Enter expiration date ">
+                                </div>
+                                <div *ngIf="dateInput.invalid && dateInput.touched" style="color: red;">
+                                    <small *ngIf="dateInput.errors.required">This field is required.</small>
+                                    <small *ngIf="dateInput.errors.dateNotBeforeToday">Date cannot be earlier than
+                                        today.</small>
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-12">
+                                <label for="name">Description</label>
+                                <input formControlName="desc" style="margin-bottom: 10px;" type="text"
+                                    class="form-control" placeholder="Description">
+                            </div>
+                            <div class="col-md-12">
+                                <label for="name">Survey Points</label>
+                                <input id="pointsInputField" [formControl]="pointsInput" formControlName="points"
+                                    style="margin-bottom: 10px;" type="number" class="form-control"
+                                    placeholder="Enter Survey points">
+
+                                <div *ngIf="pointsInput.invalid && pointsInput.touched" style="color: red;">
+                                    <small *ngIf="pointsInput.errors.required">This field is required.</small>
+                                    <small *ngIf="pointsInput.errors.min">Value must be at least 1.</small>
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-12">
+                                <label for="status">Sector</label>
+                                <div class="input-group mb-3">
+                                    <select class="custom-select" formControlName="sector" id="inputGroupSelect02">
+                                        <option value="null">Select Sector</option>
+                                        <option *ngFor="let data of sectors" [value]="data.name">{{data.name}}
+                                        </option>
+                                    </select>
+
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="status">Country</label>
+                                <div class="input-group mb-3">
+                                    <select class="custom-select" formControlName="country" id="inputGroupSelect02">
+                                        <option value="null">Select Country</option>
+                                        <option *ngFor="let data of countries" [value]="data.name">{{data.name}}
+                                        </option>
+                                    </select>
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-12" *ngIf="user.role == 'admin'">
+                                <label for="status">Status</label>
+                                <div class="input-group mb-3">
+                                    <select class="custom-select" formControlName="status" id="inputGroupSelect02">
+                                        <option value="1">Active</option>
+                                        <option value="0">InActive</option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-12">
+                                <form action="" [formGroup]="surveyForm.get('filter')">
+                                    <h5 style="padding-left: 10px;">Target Audiance</h5>
+
+                                    <h6>Select target gender</h6>
+
+                                    <div class="input-group mb-3">
+                                        <select class="custom-select" formControlName="selectedGender"
+                                            id="inputGroupSelect02">
+                                            <option [value]="'All'">All</option>
+                                            <option [value]="'Male'">Male</option>
+                                            <option [value]="'Female'">Female</option>
+                                            <option [value]="'Female'">Other</option>
+                                            <option [value]="'FemaleOther'">Female & Other</option>
+                                            <option [value]="'MaleFemale'">Male & Female</option>
+                                            <option [value]="'MaleOther'">Male & Other</option>
+                                        </select>
+
+                                    </div>
+
+                                    <h6>Select target age</h6>
+
+                                    <label for="name">From</label>
+                                    <div class="input-group mb-3">
+                                        <input formControlName="from" type="number" class="form-control"
+                                            (keyup)="valuechange($event,'from')" style="border: 1px solid #DDDDDD;"
+                                            placeholder="Enter start age">
+                                    </div>
+                                    <label for="name">To</label>
+                                    <div class="input-group mb-3">
+                                        <input formControlName="to" type="number" class="form-control"
+                                            (keyup)="valuechange($event,'to')" style="border: 1px solid #DDDDDD;"
+                                            placeholder="Enter ending age">
+                                    </div>
+                                    <label for="name">Exact Age</label>
+                                    <div class="input-group mb-3">
+                                        <input formControlName="exactAge" type="number" class="form-control"
+                                            (keyup)="valuechange($event,'exactAge')" style="border: 1px solid #DDDDDD;"
+                                            placeholder="Enter Exact age">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+                <h6>Select target location</h6>
+
+                <div class="input-group mb-3">
+                    <input required autocomplete="on" [(ngModel)]="locationSearch" type="text" class="form-control"
+                        (keydown.enter)="$event.preventDefault()" placeholder="Search Location" autocorrect="off"
+                        autocapitalize="off" spellcheck="off" #search style="border: 1px solid #DDDDDD;" />
+                </div>
+
+                <div class="input-group mb-3">
+                    <label for>Area Radius (meters)</label>
+                    <div class="input-group mb-3" [formGroup]="radiusDiv">
+                        <input id="radiusInputField" [(ngModel)]="newItemNumber" [formControl]="radiusInput"
+                            formControlName="radius" type="number" class="form-control" (keyup)="setRadius()"
+                            style="border: 1px solid #DDDDDD;" placeholder="Enter area radius to show surveys">
+                    </div>
+                    <div *ngIf="radiusInput.invalid && radiusInput.touched" style="color: red;">
+                        <small *ngIf="radiusInput.errors.required">This field is required.</small>
+                        <small *ngIf="radiusInput.errors.min">Value must be at least 500.</small>
+                    </div>
+                </div>
+
+                <button (click)="addLocation()" class="btn btn-success float-right">Set Location</button>
+
+                <div class="input-group mb-3">
+                    <div class="item-list">
+                        <div *ngFor="let item of items; let i = index" class="item">
+                            <span>{{ item.text }} - </span>
+                            <input type="number" [(ngModel)]="item.number">
+                            <button (click)="updateItem(i, item.number)">Update</button>
+                            <button (click)="removeItem(i)">Remove</button>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div style="height: 400px; width: 100%;">
+                    <agm-map style="height: 100%; width: 100%;" (mapClick)="mapClicked($event)" [latitude]="lat"
+                        [longitude]="long">
+                        <agm-marker [latitude]="data.lat" *ngFor="let data of selectedLocations" [longitude]="data.long"
+                            [markerDraggable]="false" (dragEnd)="markerDragEnd($event,data.lat,data.long)"
+                            (markerClick)="removeMarker(data.lat,data.long)"></agm-marker>
+                        <agm-circle [latitude]="data.lat" [longitude]="data.long" *ngFor="let data of selectedLocations"
+                            [radius]="data.rad" [fillColor]="circleColor" [fillOpacity]="fillOpacity"
+                            [strokeColor]="circleColor" [strokeOpacity]="strokeOpacity" [strokeWeight]="2"></agm-circle>
+                    </agm-map>
+                </div>
+
+                <button type="submit" style="margin-top: 80px;" class="btn btn-success float-right"
+                    (click)="createSurvey()">Create</button>
+                <button id="close" data-dismiss="modal" hidden></button>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>

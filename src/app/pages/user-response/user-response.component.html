@@ -1,0 +1,214 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-4 col-lg-3 col-sm-12">
+                        <h4 class="card-title float-left">List of User Responses</h4>
+
+                    </div>
+                    <div class="col-md-8 col-lg-9 col-sm-12">
+                        <div class="search-hero " style="width:70%;display: inline-block;margin-top: 10px;">
+                            <input class="form-control" type="text" name="search" style="height: 37px;"
+                                [(ngModel)]="searchText" autocomplete="off"
+                                placeholder="Search by user name, user phone...">
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div>
+                    <div *ngIf="loader" class="text-center container">
+                        <i class="fa fa-spin fa-spinner fa-5x"></i> <br />
+                    </div>
+                    <div class="tabledata" style="overflow-x: scroll;">
+
+                        <table class="table">
+                            <thead>
+
+                                <th>#</th>
+                                <th>Survey Name</th>
+                                <th>User Name</th>
+                                <th>User Phone no</th>
+                                <th>User Gender</th>
+                                <th>User Age</th>
+                                <th>Resp. Date</th>
+                                <th>Address</th>
+                                <th class="text-right">Action</th>
+                            </thead>
+                            <tbody *ngFor="let data of surveyList | filter:searchText; index as i">
+                                <tr>
+                                    <td>{{i+1}}</td>
+                                    <td *ngIf="data.survey.projectName!=''">{{data.survey.projectName}}</td>
+                                    <td *ngIf="data.survey.projectName==''">-</td>
+                                    <td *ngIf="data.user.name!=''">{{data.user.name}}</td>
+                                    <td *ngIf="data.user.name==''">-</td>
+                                    <td *ngIf="data.user.phoneCode!='' && data.user.phone!=''">{{data.user?.phoneCode}}
+                                        {{data.user?.phone}}</td>
+                                    <td *ngIf="data.user.phoneCode=='' && data.user.phone==''">-</td>
+                                    <td *ngIf="data.user.gender!=''">{{data.user.gender}}</td>
+                                    <td *ngIf="data.user.gender==''">-</td>
+                                    <td *ngIf="data.user.age!=''">{{data.user.age}}</td>
+                                    <td *ngIf="data.user.age==''">-</td>
+
+                                    <td>{{data.createdAt | date: 'short'}}</td>
+                                    <td>{{data.user.address}}</td>
+
+                                    <td class="text-right">
+                                        <img [routerLink]="['/user-single-response/' + data._id + '/' + data.surveyId]"
+                                            role="button" src="assets/images/eye.png" alt="" height="22px"
+                                            style="padding-left: 15px;">
+                                        <img role="button" src="assets/delete.png" (click)="deleteSurvey(data._id)"
+                                            alt="" height="18px" style="padding-left: 15px;">
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+            <p>{{error}}</p>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" data-backdrop="static"
+    aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <h5 *ngIf="selection == '0'" class="modal-title" id="exampleModalLongTitle">Add Survey</h5>
+                <div class="d-flex align-items-center">
+
+                    <img *ngIf="selection != '0'" (click)="selection = 0;questionType = ''"
+                        src="assets/images/arrowback.png" style="cursor: pointer;" height="20px" alt="" srcset="">
+                    <h5 class="modal-title" id="exampleModalLongTitle">{{questionType}}</h5>
+                </div>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="" [formGroup]="surveyForm" (ngSubmit)="createSurvey()">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="userName">Project Name</label>
+                                <input formControlName="projectName" style="margin-bottom: 10px;" type="text"
+                                    class="form-control" placeholder="Project Name">
+
+                            </div>
+                            <div class="col-md-12">
+                                <label for="name">Desc</label>
+                                <input formControlName="desc" style="margin-bottom: 10px;" type="text"
+                                    class="form-control" placeholder="Description">
+                            </div>
+                            <div class="col-md-12">
+                                <label for="name">Survey Points</label>
+                                <input formControlName="points" style="margin-bottom: 10px;" type="number"
+                                    class="form-control" placeholder="Enter Survey points">
+                            </div>
+
+                            <div class="col-md-12">
+                                <label for="status">Sector</label>
+                                <div class="input-group mb-3">
+                                    <select class="custom-select" formControlName="sector" id="inputGroupSelect02">
+                                        <option value="null">Select Sector</option>
+                                        <option *ngFor="let data of sectors" [value]="data.name">{{data.name}}
+                                        </option>
+                                    </select>
+
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="status">Country</label>
+                                <div class="input-group mb-3">
+                                    <select class="custom-select" formControlName="country" id="inputGroupSelect02">
+                                        <option value="null">Select Country</option>
+                                        <option *ngFor="let data of countries" [value]="data.name">{{data.name}}
+                                        </option>
+                                    </select>
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <label for="status">Status</label>
+                                <div class="input-group mb-3">
+                                    <select class="custom-select" formControlName="status" id="inputGroupSelect02">
+                                        <option value="1">Active</option>
+                                        <option value="0">InActive</option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-12">
+                                <form action="" [formGroup]="surveyForm.get('filter')">
+                                    <h5 style="padding-left: 10px;">Target Audiance</h5>
+
+                                    <h6>Select target gender</h6>
+
+                                    <div class="input-group mb-3">
+                                        <select class="custom-select" formControlName="selectedGender"
+                                            id="inputGroupSelect02">
+                                            <option [value]="'All'">All</option>
+                                            <option [value]="'Male'">Male</option>
+                                            <option [value]="'Female'">Female</option>
+                                            <option [value]="'Female'">Other</option>
+                                            <option [value]="'FemaleOther'">Female & Other</option>
+                                            <option [value]="'MaleFemale'">Male & Female</option>
+                                            <option [value]="'MaleOther'">Male & Other</option>
+                                        </select>
+
+                                    </div>
+
+                                    <h6>Select target age</h6>
+
+                                    <label for="name">From</label>
+                                    <div class="input-group mb-3">
+                                        <input formControlName="from" type="number" class="form-control"
+                                            (keyup)="valuechange($event,'from')" style="border: 1px solid #DDDDDD;"
+                                            placeholder="Enter start age">
+                                    </div>
+                                    <label for="name">To</label>
+                                    <div class="input-group mb-3">
+                                        <input formControlName="to" type="number" class="form-control"
+                                            (keyup)="valuechange($event,'to')" style="border: 1px solid #DDDDDD;"
+                                            placeholder="Enter ending age">
+                                    </div>
+                                    <label for="name">Exact Age</label>
+                                    <div class="input-group mb-3">
+                                        <input formControlName="exactAge" type="number" class="form-control"
+                                            (keyup)="valuechange($event,'exactAge')" style="border: 1px solid #DDDDDD;"
+                                            placeholder="Enter Exact age">
+                                    </div>
+                                    <h6>Select target location</h6>
+
+                                </form>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                    <button type="submit" class="btn btn-success float-right">Create</button>
+                    <button id="close" data-dismiss="modal" hidden></button>
+                </form>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>

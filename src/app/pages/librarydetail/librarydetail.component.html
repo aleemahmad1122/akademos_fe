@@ -1,0 +1,816 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-md-4 col-lg-3 col-sm-12">
+            <h4 class="card-title float-left">Library Details</h4>
+          </div>
+          <div class="col-md-8 col-lg-9 col-sm-12">
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <div style="border-radius: 12px;">
+
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-12">
+                <label for="userName">Project Name</label>
+                <input [(ngModel)]="libraryForm.projectName" style="margin-bottom: 10px;" type="text"
+                  class="form-control" placeholder="Project Name">
+
+              </div>
+              <div class="col-md-12">
+                <label for="name">Desc</label>
+                <input [(ngModel)]="libraryForm.desc" style="margin-bottom: 10px;" type="text" class="form-control"
+                  placeholder="Description">
+              </div>
+              <div class="col-md-12">
+                <label for="name">Points</label>
+                <input [(ngModel)]="libraryForm.points" style="margin-bottom: 10px;" type="number" class="form-control"
+                  placeholder="Description">
+              </div>
+
+              <div class="col-md-12">
+                <label for="status">Sector</label>
+                <div class="input-group mb-3">
+                  <select class="custom-select" [(ngModel)]="libraryForm.sector" id="inputGroupSelect02">
+                    <option value="null">Select Sector</option>
+                    <option *ngFor="let data of sectors" [value]="data.name">{{data.name}}
+                    </option>
+                  </select>
+
+                </div>
+              </div>
+              <div class="col-md-12">
+                <label for="status">Country</label>
+                <div class="input-group mb-3">
+                  <select class="custom-select" [(ngModel)]="libraryForm.country" id="inputGroupSelect02">
+                    <option value="null">Select Country</option>
+                    <option *ngFor="let data of countries" [value]="data.name">{{data.name}}
+                    </option>
+                  </select>
+
+                </div>
+              </div>
+              <h5 style="padding-left: 10px;">Target Audiance</h5>
+              <div class="col-md-12">
+
+                <h6>Select target gender</h6>
+  
+                <div class="input-group mb-3">
+                    <select class="custom-select"
+                        [(ngModel)]="libraryForm.filter.selectedGender" id="inputGroupSelect02">
+                        <option [value]="'All'">All</option>
+                        <option [value]="'Male'">Male</option>
+                        <option [value]="'Female'">Female</option>
+                        <option [value]="'Other'">Other</option>
+                        <option [value]="'FemaleOther'">Female & Other</option>
+                        <option [value]="'MaleFemale'">Male & Female</option>
+                        <option [value]="'MaleOther'">Male & Other</option>
+                    </select>
+  
+                </div>
+              </div>
+              <div class="col-md-12">
+                
+                                <h6>Select target age</h6>
+                
+                                <label for="name">From</label>
+                                <div class="input-group mb-3">
+                                    <input [(ngModel)]="libraryForm.filter.from"  type="number"
+                                        class="form-control" (keyup)="valuechange($event,'from')" style="border: 1px solid #DDDDDD;" placeholder="Enter start age">
+                                </div>
+
+              </div>
+              <div class="col-md-12">
+
+                <label for="name">To</label>
+                <div class="input-group mb-3">
+                    <input [(ngModel)]="libraryForm.filter.to" type="number"
+                        class="form-control" (keyup)="valuechange($event,'to')" style="border: 1px solid #DDDDDD;" placeholder="Enter ending age">
+                </div>
+              </div>
+              <div class="col-md-12">
+
+                <label for="name">Exact Age</label>
+                <div class="input-group mb-3">
+                    <input [(ngModel)]="libraryForm.filter.exactAge" type="number"
+                        class="form-control" (keyup)="valuechange($event,'exactAge')" style="border: 1px solid #DDDDDD;" placeholder="Enter Exact age">
+                </div>
+              </div>
+
+              <div class="col-md-12">
+                <h6>Select target location</h6>
+
+              </div>
+
+
+
+              <div class="col-md-12">
+                <label for="status">Status</label>
+                <div class="input-group mb-3">
+                  <select class="custom-select" [(ngModel)]="libraryForm.status" id="inputGroupSelect02">
+                    <option value="1">Active</option>
+                    <option value="0">InActive</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="questionform-array" *ngFor="let data of libraryForm.question; let i=index">
+            <div class="d-flex justify-content-center">
+
+              <b style="padding-left: 16px;padding-top:45px;font-size: 17px;">Question {{i+1}}</b>
+            </div>
+            <img (click)="openSetting(i)" data-toggle="modal" data-target="#settingModal"
+              class="cp z-index-2 setting-img" src="assets/images/settings.png" height="20px" alt="" srcset="">
+            <img (click)="removeQuestion(i)" class="cp z-index-2 delete-img" src="assets/images/delete.png"
+              height="20px" alt="" srcset="">
+            <div style="padding: 16px;">
+              <div style="font-weight:bold">
+                Question: <input style="height: 43px;" [(ngModel)]="data.title" type="text" class="form-control"
+                  placeholder="Enter Question">
+              </div>
+              <div style="font-weight:bold" class="mt-2">
+                Hint: <input style="height: 43px;" type="text" [(ngModel)]="data.hint" class="form-control"
+                  placeholder="Enter Hint">
+              </div>
+            </div>
+            <div class="d-flex flex-column" *ngIf="data.options" style="padding: 0px 16px 5px 16px;">
+              <span style="font-weight:bold">Options:</span>
+              <div *ngFor="let data2 of data.options;index as j"
+                class="d-flex align-items-center justify-content-between">
+
+                <div class="d-flex align-items-center justify-content-between w-100">
+
+                  <input style="height: 43px;width: 92%;" type="text" [(ngModel)]="data2.option"
+                    class="form-control mt-2" placeholder="Option {{j +1}}">
+
+                  <img (click)="removeOption(i, j)" src="assets/delete.png" style="cursor: pointer;" height="20px"
+                    alt="" srcset="">
+                </div>
+              </div>
+              <button class="btn btn-success" style="background-color: grey;" (click)="addNewFieldOption(i)">Add
+                Option</button>
+            </div>
+
+            <!-- start of first sub question -->
+            <hr>
+            <div class="d-flex flex-column" style="padding: 0px 16px 5px 16px;">
+              <button class="btn btn-success" style="margin-top: 0px;background-color: grey;"
+                (click)="addDuplicate(data)">Duplicate Question</button>
+            </div>
+
+          </div>
+          <div *ngIf="libraryForm.question.length  == 0" class="d-flex align-items-center justify-content-center"
+            style="min-height: 50vh;background-color: #f4f4f4;gap: 3;border-radius: 12px;">
+            <h5 class="tw-text-[red]">No Library Questions to show</h5>
+          </div>
+          <div class="d-flex justify-content-end">
+            <button class="btn btn-success" style="min-height: 7vh;
+           width: 23%;float: right;" (click)="addQuestion = true;">Add Question</button>
+            <button type="submit" (click)="saveLibrary()" class="btn btn-success"
+              style="min-height: 7vh; width: 23%;float: right;">
+              Save Library</button>
+            <button type="submit" (click)="saveSurvey()" class="btn btn-success"
+              style="min-height: 7vh; width: 23%;float: right;">
+              Save as new Survey</button>
+          </div>
+          <div class="d-flex " style="flex-wrap: wrap;gap: 4px;" *ngIf="addQuestion">
+            <div (click)="addNewFieldQuestion(data);"
+              [ngStyle]="{'background-color':data.key  == selectedKey? '#7b4a9c':'#E5E5E5','color':data.key  == selectedKey? 'white':'black'}"
+              *ngFor="let data of questionKeys; let i=index" class="d-flex align-items-center justify-content-center"
+              style="flex-grow: 1;width: 146px;min-height: 40px; max-height: 55px; font-size: 15px;font-weight: 500;cursor: pointer;">
+              {{data.name}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <div id="settingModal" class="modal fade" data-backdrop="static" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="d-flex justify-content-center align-items-center ">
+          <h4 style="margin-top: 20px !important;">Main Question Settings</h4>
+        </div>
+        <div class="d-flex justify-content-center flex-column">
+
+          <div>
+            <div style="padding: 0px 16px 5px 16px;" class="d-flex flex-column">
+              <h6 style="margin-top: 0px !important;">Question Options</h6>
+              <label for="Mendatory Response" style="font-weight:500" class="mt-2">Mendatory Response</label>
+              <div class="input-group mb-3">
+                <select class="custom-select" [(ngModel)]="selectedQuestion?.settings.isImp" id="inputGroupSelect02">
+                  <option [ngValue]="'true'">Yes</option>
+                  <option [ngValue]="'false'">No</option>
+                </select>
+              </div>
+
+              <div class="input-group mb-3" *ngIf="selectedQuestion?.settings.isImp == 'true'">
+                <label for="errorMessage" style="margin: 0px !important;font-weight:500">Error Message</label>
+                <input style="height: 43px;width: 100%;border: o1px solid #DDDDDD; border-radius: 0.25rem;"
+                  placeholder="Enter Error Message" type="text" [(ngModel)]="selectedQuestion?.settings.errorMessage"
+                  class="form-control mt-2">
+              </div>
+
+
+              <!-- sub question -->
+              <div *ngIf="selectedQuestion?.subQuestion.length > 0">
+
+                <div class="questionform-array" *ngFor="let subQues of selectedQuestion?.subQuestion; let k=index">
+                  <div class="d-flex justify-content-center">
+
+                    <b style="padding-left: 16px;padding-top:5px;font-size: 17px;">Question {{selectedIndex + 1}} .
+                      {{k+1}}</b>
+                  </div>
+                  <img (click)="openSub1Setting(k)" data-toggle="modal" data-target="#innerQuestionSettingModal"
+                    class="cp z-index-2 setting-img" src="assets/images/settings.png" height="20px" alt="" srcset="">
+                  <img (click)="removeSub1Question(k)" class="cp z-index-2 delete-img" src="assets/images/delete.png"
+                    height="20px" alt="" srcset="">
+                  <div style="padding: 16px;">
+                    <div style="font-weight:bold">
+                      Question: <input style="height: 43px;" [(ngModel)]="subQues.title" type="text"
+                        class="form-control" placeholder="Enter Question">
+                    </div>
+                    <div style="font-weight:bold" class="mt-2">
+                      Hint: <input style="height: 43px;" type="text" [(ngModel)]="subQues.hint" class="form-control"
+                        placeholder="Enter Hint">
+                    </div>
+                    <label for="Mendatory Response" style="font-weight:500" class="mt-2">Mendatory Response</label>
+                    <div class="input-group mb-3">
+                      <select class="custom-select" [(ngModel)]="subQues?.settings.isImp" id="inputGroupSelect02">
+                        <option [ngValue]="'true'">Yes</option>
+                        <option [ngValue]="'false'">No</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-column" *ngIf="subQues.options" style="padding: 0px 16px 5px 16px;">
+                    <span style="font-weight:bold">Options:</span>
+                    <div *ngFor="let subQuesOpt of subQues.options;index as j"
+                      class="d-flex align-items-center justify-content-between">
+
+                      <div class="d-flex align-items-center justify-content-between w-100">
+
+                        <input style="height: 43px;width: 92%;" type="text" [(ngModel)]="subQuesOpt.option"
+                          class="form-control mt-2" placeholder="Option {{j +1 }}">
+
+                        <img (click)="removeSub1Option(k,j)" src="assets/delete.png" style="cursor: pointer;"
+                          height="20px" alt="" srcset="">
+                      </div>
+                    </div>
+                    <button class="btn btn-success" style="background-color: grey;"
+                      (click)="addNewSubQuesFieldOption(k)">Add
+                      Option</button>
+                  </div>
+
+                  <div style="padding: 0px 16px 5px 16px; font-weight: bold;">
+                    Show When:
+
+                  </div>
+
+                  <div class="d-flex align-items-center" style="gap: 10px;padding: 0px 16px 5px 16px;margin-top: 10px;">
+                    <div class="input-group" *ngIf="selectedQuestion" style="margin-bottom: 0px;">
+                      <input disabled style="height: 43px;width: 100%;border: 1px solid #DDDDDD; border-radius: 0.25rem;margin-top: 0px; "
+                        placeholder="Enter Error Message" type="text" [(ngModel)]="selectedQuestion.title"
+                        class="form-control">
+                    </div>
+    
+                    <div class="input-group" *ngIf="selectedQuestion?.settings?.isImp == 'false'" style="margin-top: 0px;">
+                      <select class="custom-select" style="border-top: none;
+                      border-right: none;
+                      border-left: none;
+                      border-radius: 0px;" (change)="changeAnswerArryInSkipLogic(j)" [(ngModel)]="subQues.operation"
+                        id="inputGroupSelect02">
+                        <option value="pleaseselect">Please Select</option>
+                        <option value="!null">Was answered</option>
+                        <option value="null">Was not answered</option>
+                        <option value="=">=</option>
+                        <option value="!=">!=</option>
+                      </select>
+                    </div>
+                    <div class="input-group" *ngIf="selectedQuestion?.settings?.isImp == 'true'" style="margin-bottom: 0px;">
+                      <select class="custom-select" style="border-radius: 4px;" (change)="changeAnswerArryInSkipLogic(j)" [(ngModel)]="subQues.operation"
+                        id="inputGroupSelect02">
+                        <option value="pleaseselect">Please Select</option>
+                        <option value="=">=</option>
+                        <option value="!=">!=</option>
+                      </select>
+                    </div>
+                    <div class="input-group " style="margin-bottom: 0px;"
+                      *ngIf="subQues.operation != 'null' && subQues.operation != '!null' && subQues.operation != 'pleaseselect'">    
+                      <select class="custom-select" style="border-radius: 4px;" [(ngModel)]="subQues.selectedAnswer" id="inputGroupSelect02">
+                        <option [value]="null">Please select</option>
+                        <ng-container *ngFor="let optionValue of selectedQuestion?.options;index as l">
+                          <option [value]="optionValue.option">{{optionValue.option}}</option>
+                        </ng-container>
+                      </select>
+                    </div>
+                  </div>
+    
+
+
+
+                  <!-- <div class="d-flex flex-column" style="padding: 0px 16px 5px 16px;">
+                    <button class="btn btn-success" style="margin-top: 0px;background-color: grey;">Add Sub
+                      Questions</button>
+                  </div> -->
+
+                  <!-- <div class="d-flex" style="flex-wrap: wrap;gap: 4px;padding: 0px 3% 0px 3%;" *ngIf="addSubQuestionn">
+                    <div (click)="addSubQuestion(data,i);"
+                      [ngStyle]="{'background-color':data.key  == selectedKey? '#7b4a9c':'#E5E5E5','color':data.key  == selectedKey? 'white':'black'}"
+                      *ngFor="let data of questionKeys; let i=index"
+                      class="d-flex align-items-center justify-content-center"
+                      style="flex-grow: 1;width: 146px;min-height: 40px; max-height: 55px; font-size: 15px;font-weight: 500;cursor: pointer;">
+                      {{data.name}}
+                    </div>
+                  </div> -->
+                  <hr>
+                  <div class="d-flex flex-column" style="padding: 0px 16px 5px 16px;">
+                    <button class="btn btn-success" style="margin-top: 0px;background-color: grey;"
+                      (click)="addSubQuesDuplicate(subQues,k)">Duplicate Question</button>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="selectedQuestion?.key == 'selectOne' || selectedQuestion?.key == 'selectMany'">
+
+                <h6 style="margin-top: 10px !important;" >Add Sub Question if this condition meets</h6>
+              </div>
+              <div class="d-flex align-items-center" style="gap: 10px;" *ngIf="selectedQuestion?.key == 'selectOne' || selectedQuestion?.key == 'selectMany'">
+                <div class="input-group" *ngIf="selectedQuestion" style="margin-bottom: 0px;">
+                  <input disabled style="height: 43px;width: 100%;border: o1px solid #DDDDDD; border-radius: 0.25rem;"
+                    placeholder="Enter Error Message" type="text" [(ngModel)]="selectedQuestion.title"
+                    class="form-control mt-2">
+                </div>
+
+                <div class="input-group" *ngIf="selectedQuestion?.settings?.isImp == 'false'" style="margin-bottom: 0px;">
+                  <select class="custom-select" style="border-top: none;
+                  border-right: none;
+                  border-left: none;
+                  border-radius: 0px;" (change)="changeAnswerArryInSkipLogic(j)" [(ngModel)]="showQuesObj.operation"
+                    id="inputGroupSelect02">
+                    <option value="pleaseselect">Please Select</option>
+                    <option value="!null">Was answered</option>
+                    <option value="null">Was not answered</option>
+                    <option value="=">=</option>
+                    <option value="!=">!=</option>
+                  </select>
+                </div>
+                <div class="input-group" *ngIf="selectedQuestion?.settings?.isImp == 'true'" style="margin-bottom: 0px;">
+                  <select class="custom-select" style="border-top: none;
+                  border-right: none;
+                  border-left: none;
+                  border-radius: 0px;" (change)="changeAnswerArryInSkipLogic(j)" [(ngModel)]="showQuesObj.operation"
+                    id="inputGroupSelect02">
+                    <option value="pleaseselect">Please Select</option>
+                    <option value="=">=</option>
+                    <option value="!=">!=</option>
+                  </select>
+                </div>
+                <div class="input-group mt-2" style="margin-bottom: 0px;"
+                  *ngIf="showQuesObj.operation != 'null' && showQuesObj.operation != '!null' && showQuesObj.operation != 'pleaseselect'">
+
+                  <!-- <ng-select *ngIf="selectedQuestion?.key == 'selectMany'" [(ngModel)]="showQuesObj.answer"
+                    [multiple]="true" placeholder="Please Select">
+                    <ng-option *ngFor="let optionValue of selectedQuestion?.options"
+                      [value]="optionValue.option">{{optionValue.option}}</ng-option>
+                  </ng-select> -->
+
+                  <select  class="custom-select" style="border-top: none;
+                  border-right: none;
+                  border-left: none;
+                  border-radius: 0px;" [(ngModel)]="showQuesObj.answer" id="inputGroupSelect02">
+                    <option [value]="null">Please select</option>
+                    <ng-container *ngFor="let optionValue of selectedQuestion?.options;index as l">
+                      <option [value]="optionValue.option">{{optionValue.option}}</option>
+                    </ng-container>
+                  </select>
+                </div>
+              </div>
+
+
+
+              <!-- skip logic section -->
+
+
+              <!-- <div class="d-flex align-items-center" style="gap: 10px;">
+                <div class="input-group" *ngIf="selectedQuestion" style="margin-bottom: 0px;">
+                  <input disabled style="height: 43px;width: 100%;border: o1px solid #DDDDDD; border-radius: 0.25rem;"
+                    placeholder="Enter Error Message" type="text" [(ngModel)]="selectedQuestion.title"
+                    class="form-control mt-2">
+                </div>
+
+                <div class="input-group" *ngIf="selectedQuestion?.settings?.isImp == 'false'" style="margin-bottom: 0px;">
+                  <select class="custom-select" style="border-top: none;
+                  border-right: none;
+                  border-left: none;
+                  border-radius: 0px;" (change)="changeAnswerArryInSkipLogic(j)" [(ngModel)]="showQuesObj.operation"
+                    id="inputGroupSelect02">
+                    <option value="pleaseselect">Please Select</option>
+                    <option value="!null">Was answered</option>
+                    <option value="null">Was not answered</option>
+                    <option value="=">=</option>
+                    <option value="!=">!=</option>
+                  </select>
+                </div>
+                <div class="input-group" *ngIf="selectedQuestion?.settings?.isImp == 'true'" style="margin-bottom: 0px;">
+                  <select class="custom-select" style="border-top: none;
+                  border-right: none;
+                  border-left: none;
+                  border-radius: 0px;" (change)="changeAnswerArryInSkipLogic(j)" [(ngModel)]="showQuesObj.operation"
+                    id="inputGroupSelect02">
+                    <option value="pleaseselect">Please Select</option>
+                    <option value="=">=</option>
+                    <option value="!=">!=</option>
+                  </select>
+                </div>
+                <div class="input-group mt-2" style="margin-bottom: 0px;"
+                  *ngIf="showQuesObj.operation != 'null' && showQuesObj.operation != '!null' && showQuesObj.operation != 'pleaseselect'">
+
+                  <ng-select *ngIf="selectedQuestion?.key == 'selectMany'" [(ngModel)]="showQuesObj.answer"
+                    [multiple]="true" placeholder="Please Select">
+                    <ng-option *ngFor="let optionValue of selectedQuestion?.options"
+                      [value]="optionValue.option">{{optionValue.option}}</ng-option>
+                  </ng-select>
+
+                  <select *ngIf="selectedQuestion?.key != 'selectMany'" class="custom-select" style="border-top: none;
+                  border-right: none;
+                  border-left: none;
+                  border-radius: 0px;" [(ngModel)]="showQuesObj.answer" id="inputGroupSelect02">
+                    <option [value]="null">Please select</option>
+                    <ng-container *ngFor="let optionValue of selectedQuestion?.options;index as l">
+                      <option [value]="optionValue.option">{{optionValue.option}}</option>
+                    </ng-container>
+                  </select>
+                </div>
+              </div> -->
+              <!-- sub questions -->
+              <!-- <div class="d-flex flex-column" *ngIf="selectedQuestion?.title != '' && selectedQuestion?.options.length > 0"
+                  style="padding: 0px 16px 5px 16px;">
+                  <button (click)="addSubQuestionn = true" class="btn btn-success"
+                    style="margin-top: 0px;background-color: grey;">Add Sub Questions</button>
+                </div> -->
+              <div class="d-flex" style="flex-wrap: wrap;gap: 4px;margin-top: 10px;"
+                *ngIf="showQuesObj.operation == 'null' || showQuesObj.operation == '!null' || ((showQuesObj.operation == '=' || showQuesObj.operation == '!=') && showQuesObj.answer != 'null')">
+                <div (click)="addSubQuestion(data);"
+                  [ngStyle]="{'background-color':data.key  == selectedKey? '#7b4a9c':'#E5E5E5','color':data.key  == selectedKey? 'white':'black'}"
+                  *ngFor="let data of questionKeys; let i=index"
+                  class="d-flex align-items-center justify-content-center"
+                  style="flex-grow: 1;width: 146px;min-height: 40px; max-height: 55px; font-size: 15px;font-weight: 500;cursor: pointer;">
+                  {{data.name}}
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="d-flex justify-content-end" style="padding: 0px 16px 5px 16px;">
+            <button class="btn btn-danger" (click)="cancelSetting()" data-dismiss="modal"
+              style="float: right;">Cancel</button>
+            <button type="submit" (click)="saveSetting()" class="btn btn-success" style="float: right;">
+              Save Settings</button>
+            <button class="btn btn-danger" hidden id="close" data-dismiss="modal">cancel</button>
+          </div>
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <div id="innerQuestionSettingModal" class="modal fade" data-backdrop="static" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="d-flex justify-content-center align-items-center ">
+          <h4 style="margin-top: 20px !important;">Sub Question Settings</h4>
+        </div>
+        <div class="d-flex justify-content-center flex-column">
+
+          <div>
+            <div style="padding: 0px 16px 5px 16px;" class="d-flex flex-column">
+              <h6 style="margin-top: 0px !important;">Question Options</h6>
+              <label for="Mendatory Response" style="font-weight:500" class="mt-2">Mendatory Response</label>
+              <div class="input-group mb-3">
+                <select class="custom-select" [(ngModel)]="selectedQuestion?.settings.isImp" id="inputGroupSelect02">
+                  <option value="'true'">Yes</option>
+                  <option value="'false'">No</option>
+                </select>
+              </div>
+
+              <div class="input-group mb-3" *ngIf="selectedQuestion?.settings.isImp == 'true'">
+                <label for="errorMessage" style="margin: 0px !important;font-weight:500">Error Message</label>
+                <input style="height: 43px;width: 100%;border: o1px solid #DDDDDD; border-radius: 0.25rem;"
+                  placeholder="Enter Error Message" type="text" [(ngModel)]="selectedQuestion?.settings.errorMessage"
+                  class="form-control mt-2">
+
+              </div>
+
+              <!-- skip logic section -->
+
+              <h6 *ngIf="selectedQuestion?.settings.isImp == 'true'" style="margin-top: 10px !important;">Add
+                subquestion on the base of main question's answer
+              </h6>
+              <!-- <label for="" *ngIf="selectedQuestion?.settings.isImp == 'true'">This question
+                will only be displayed if the following conditions apply</label> -->
+              <!-- skip logic   array -->
+              <!-- <div >
+                <div *ngFor="let data of selectedQuestion?.settings.skipLogic;index as j">
+                  <div class="d-flex align-items-center" style="width: 100%;margin-bottom: 8px;">
+                    <div class="input-group" style="margin-bottom: 0px;">
+                      <select class="custom-select" style="border-top: none;margin-right:10px;
+                        border-right: none;
+                        border-left: none;
+                        border-radius: 0px;" (change)="setOptions($event.target.selectedIndex,j)"
+                        [(ngModel)]="data.questionTitle" id="inputGroupSelect02">
+                        <option value="null">Select Question</option>
+                        <ng-container *ngFor="let question of libraryForm.question;index as k">
+                          <option *ngIf="question.title != '' && selectedIndex != k" [ngValue]="question.title">
+                            {{question.title}}</option>
+                        </ng-container>
+                      </select>
+                    </div>
+                    <div class="input-group" style="margin-bottom: 0px;">
+                      <select class="custom-select" style="border-top: none;
+                        border-right: none;
+                        border-left: none;
+                        border-radius: 0px;" (change)="changeAnswerArryInSkipLogic(j)" [(ngModel)]="data.operation"
+                        id="inputGroupSelect02">
+                        <option value="!null">Was answered</option>
+                        <option value="null">Was not answered</option>
+                        <option value="=">=</option>
+                        <option value="!=">!=</option>
+                      </select>
+
+                    </div>
+                    <div class="input-group" *ngIf="data.operation != 'null' && data.operation != '!null'"
+                      style="margin-bottom: 0px;">
+                      <select class="custom-select" style="border-top: none;
+                        border-right: none;
+                        border-left: none;
+                        border-radius: 0px;" [(ngModel)]="data.answer" id="inputGroupSelect02">
+                        <option [value]="null">Please select</option>
+                        <ng-container *ngFor="let optionValue of data.innerOptionArray;index as l">
+                          <option [value]="optionValue.option">{{optionValue.option}}</option>
+                        </ng-container>
+                      </select>
+                    </div>
+                    <img src="assets/images/delete.png" style="cursor: pointer;" (click)="deleteSkipLogic(j)"
+                      height="20px" width="20px" alt="" srcset="">
+                  </div>
+                </div>
+              </div>
+              <button *ngIf="selectedQuestion?.settings.isImp == 'true'" class="btn btn-success"
+                style="margin-top: 0px;float: right;" (click)="addSkipLogicQuestion()">Add
+                Question</button> -->
+
+
+              <!-- sub questions -->
+              <div *ngIf="selectedQuestion?.subQuestion.length > 0" style="padding-left: 10%;">
+
+                <div class="questionform-array" *ngFor="let subQues of selectedQuestion?.subQuestion; index as k">
+                  <div class="d-flex justify-content-center">
+
+                    <b style="padding-left: 16px;padding-top:5px;font-size: 17px;">Question {{selectedIndex + 1}} .
+                      {{k+1}} </b>
+                  </div>
+                  <img (click)="openSub1Setting(i,k)" data-toggle="modal" data-target="#settingModal"
+                    class="cp z-index-2 setting-img" src="assets/images/settings.png" height="20px" alt="" srcset="">
+                  <img (click)="removeSub1Question(i,k)" class="cp z-index-2 delete-img" src="assets/images/delete.png"
+                    height="20px" alt="" srcset="">
+                  <div style="padding: 16px;">
+                    <div style="font-weight:bold">
+                      Question: <input style="height: 43px;" [(ngModel)]="subQues.title" type="text"
+                        class="form-control" placeholder="Enter Question">
+                    </div>
+                    <div style="font-weight:bold" class="mt-2">
+                      Hint: <input style="height: 43px;" type="text" [(ngModel)]="subQues.hint" class="form-control"
+                        placeholder="Enter Hint">
+                    </div>
+                  </div>
+                  <div class="d-flex flex-column" *ngIf="subQues.options" style="padding: 0px 16px 5px 16px;">
+                    <span style="font-weight:bold">Options:</span>
+                    <div *ngFor="let subQuesOpt of subQues.options;index as j"
+                      class="d-flex align-items-center justify-content-between">
+
+                      <div class="d-flex align-items-center justify-content-between w-100">
+                        <input style="height: 43px;width: 92%;" type="text" [(ngModel)]="subQuesOpt.option"
+                          class="form-control mt-2" placeholder="Option {{j +1 }}">
+
+                        <img (click)="removeSub1Option(k,j)" src="assets/delete.png" style="cursor: pointer;"
+                          height="20px" alt="" srcset="">
+                      </div>
+                    </div>
+                    <button class="btn btn-success" style="background-color: grey;" (click)="addNewFieldOption(i,k)">Add
+                      Option</button>
+                  </div>
+                  <div class="d-flex flex-column" style="padding: 0px 16px 5px 16px;">
+                    <button (click)="addSubQuestionn = true" class="btn btn-success"
+                      style="margin-top: 0px;background-color: grey;">Add Sub Questions</button>
+                  </div>
+
+                  <!-- <div class="d-flex" style="flex-wrap: wrap;gap: 4px;padding: 0px 3% 0px 3%;" *ngIf="addSubQuestionn">
+                      <div (click)="addSubQuestion(data,i);"
+                        [ngStyle]="{'background-color':data.key  == selectedKey? '#7b4a9c':'#E5E5E5','color':data.key  == selectedKey? 'white':'black'}"
+                        *ngFor="let data of questionKeys; let i=index"
+                        class="d-flex align-items-center justify-content-center"
+                        style="flex-grow: 1;width: 146px;min-height: 40px; max-height: 55px; font-size: 15px;font-weight: 500;cursor: pointer;">
+                        {{data.name}}
+                      </div>
+                    </div> -->
+                  <hr>
+                  <div class="d-flex flex-column" style="padding: 0px 16px 5px 16px;">
+                    <button class="btn btn-success" style="margin-top: 0px;background-color: grey;"
+                      (click)="addDuplicate(data)">Duplicate Question</button>
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex flex-column"
+                *ngIf="selectedQuestion?.title != '' && selectedQuestion?.options?.length > 0"
+                style="padding: 0px 16px 5px 16px;">
+                <button (click)="addSubQuestionn = true" class="btn btn-success"
+                  style="margin-top: 0px;background-color: grey;">Add Sub Questions</button>
+              </div>
+
+              <div class="d-flex" style="flex-wrap: wrap;gap: 4px;padding: 0px 16px 0px 16px;" *ngIf="addSubQuestionn">
+                <div (click)="addSubQuestion(data);"
+                  [ngStyle]="{'background-color':data.key  == selectedKey? '#7b4a9c':'#E5E5E5','color':data.key  == selectedKey? 'white':'black'}"
+                  *ngFor="let data of questionKeys; let i=index"
+                  class="d-flex align-items-center justify-content-center"
+                  style="flex-grow: 1;width: 146px;min-height: 40px; max-height: 55px; font-size: 15px;font-weight: 500;cursor: pointer;">
+                  {{data.name}}
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="d-flex justify-content-end" style="padding: 0px 16px 5px 16px;">
+            <button class="btn btn-danger" (click)="cancelSetting()" data-dismiss="modal"
+              style="float: right;">Cancel</button>
+            <button type="submit" (click)="saveSetting()" class="btn btn-success" style="float: right;">
+              Save Settings</button>
+            <button class="btn btn-danger" hidden id="close" data-dismiss="modal">cancel</button>
+          </div>
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 
+<form action="" *ngIf="selectedQuestionFormGroup" [formGroup]="selectedQuestionFormGroup" style="width: 100%;"
+(ngSubmit)="saveSetting()">
+<div>
+  <div formGroupName="settings" style="padding: 0px 16px 5px 16px;" class="d-flex flex-column">
+    <h6 style="margin-top: 0px !important;">Question Options</h6>
+    <label for="guidanceHint" style="margin: 0px !important;font-weight:500">Guidance Hint</label>
+    <input style="height: 43px;width: 100%;" placeholder="Enter guidance hint" type="text"
+      formControlName="guidanceHint" class="form-control mt-2">
+
+    <label for="Mendatory Response" style="font-weight:500" class="mt-2">Mendatory Response</label>
+    <div class="input-group mb-3">
+      <select class="custom-select" formControlName="isImp" id="inputGroupSelect02">
+        <option value="true">Yes</option>
+        <option value="false">No</option>
+      </select>
+    </div>
+    
+    <div class="input-group mb-3" *ngIf="selectedQuestionFormGroup.get('settings').get('isImp').value == 'true'">
+      <label for="errorMessage"  style="margin: 0px !important;font-weight:500">Error Message</label>
+      <input style="height: 43px;width: 100%;border: 1px solid #DDDDDD; border-radius: 0.25rem;" placeholder="Enter Error Message" type="text"
+        formControlName="errorMessage" class="form-control mt-2">
+
+    </div>
+
+    skip logic section
+
+    <h6 *ngIf="selectedQuestionFormGroup.get('settings').get('isImp').value == 'true'"
+      style="margin-top: 10px !important;">Skip logic</h6>
+    <label for="" *ngIf="selectedQuestionFormGroup.get('settings').get('isImp').value == 'true'">This question
+      will only be displayed if the following conditions apply</label>
+      skip logic array
+    <div
+      *ngIf="skipLogicFormArray.controls.length > 0 && selectedQuestionFormGroup.get('settings').get('isImp').value == 'true'">
+      <div formArrayName="skipLogic" *ngFor="let data of skipLogicFormArray.controls;index as j">
+        <div [formGroupName]="j" class="d-flex align-items-center" style="width: 100%;margin-bottom: 8px;">
+          <div class="input-group" style="margin-bottom: 0px;">
+            <select class="custom-select" style="border-top: none;margin-right:10px;
+              border-right: none;
+              border-left: none;
+              border-radius: 0px;" (change)="changeOptionArryInSkipLogic($event.target.selectedIndex,j)"
+              formControlName="questionTitle" id="inputGroupSelect02">
+
+              <option value="null">Select question</option>
+              <ng-container *ngFor="let question of questionFormArray.controls;index as k">
+                <option *ngIf="question.get('title').value != '' && selectedIndex != k"
+                  [value]="question.get('title').value">{{question.get('title').value}}</option>
+              </ng-container>
+            </select>
+          </div>
+          <div class="input-group" style="margin-bottom: 0px;">
+            <select class="custom-select" style="border-top: none;
+              border-right: none;
+              border-left: none;
+              border-radius: 0px;"(change)="changeAnswerArryInSkipLogic(j)" formControlName="operation" id="inputGroupSelect02">
+              <option value="!null">Was answered</option>
+              <option value="null">Was not answered</option>
+              <option value="=">=</option>
+              <option value="!=">!=</option>
+            </select>
+
+          </div>
+          <div class="input-group" *ngIf="data.get('operation').value != 'null' && data.get('operation').value != '!null'" style="margin-bottom: 0px;">
+            <select class="custom-select" style="border-top: none;
+              border-right: none;
+              border-left: none;
+              border-radius: 0px;" formControlName="answer" id="inputGroupSelect02">
+              <option 
+              [value]="null">Please select</option>
+              <ng-container formArrayName="innerOptionFormArray"
+                *ngFor="let option of data.get('innerOptionFormArray').controls;index as l">
+                <option *ngIf="option.get('option').value != '' && selectedIndex != k"
+                [value]="option.get('option').value">{{option.get('option').value}}</option>
+              </ng-container>
+            </select>
+          </div>
+          <img src="assets/images/delete.png" style="cursor: pointer;" (click)="deleteSkipLogic(j)"
+            height="20px" width="20px" alt="" srcset="">
+        </div>
+      </div>
+    </div>
+    add skip logic question fields
+    <div class="d-flex flex-column" style="width: 100%;"
+      *ngIf="selectedQuestionFormGroup.get('settings').get('isImp').value == 'true'">
+      <form action="" [formGroup]="skipLogicForm">
+        <div class="d-flex">
+
+          <div class="input-group mb-3">
+            <select class="custom-select" *ngIf="questionFormArray.controls.length > 0" style="border-top: none;margin-right:10px;
+          border-right: none;
+          border-left: none;
+          border-radius: 0px;" (change)="setOptions($event.target.selectedIndex,j)"
+              formControlName="questionTitle" id="inputGroupSelect02">
+              <option value="null">Select question</option>
+              <ng-container *ngFor="let question of questionFormArray.controls;index as k">
+                <option *ngIf="question.get('title').value != '' && selectedIndex != k"
+                  [value]="question.get('title').value">{{question.get('title').value}}</option>
+              </ng-container>
+            </select>
+          </div>
+          <div class="input-group mb-3">
+            <select class="custom-select" style="border-top: none;
+          border-right: none;
+          border-left: none;
+          border-radius: 0px;" formControlName="operation" id="inputGroupSelect02">
+              <option value="!null">Was answered</option>
+              <option value="null">Was not answered</option>
+              <option value="=">=</option>
+              <option value="!=">!=</option>
+            </select>
+
+          </div>
+          <div class="input-group mb-3" *ngIf="skipLogicForm.get('questionTitle').value != 'null' && skipLogicForm.get('operation').value != 'null' && skipLogicForm.get('operation').value != '!null'">
+            <select class="custom-select" style="border-top: none;
+          border-right: none;
+          border-left: none;
+          border-radius: 0px;" formControlName="answer" id="inputGroupSelect02">
+              <option value="null">Please Select</option>
+              <ng-container *ngFor="let option of selectionQuestionOptionAray?.controls;index as l">
+                <option *ngIf="option.get('option').value != '' && selectedIndex != k"
+                  [value]="option.get('option').value">{{option.get('option').value}}</option>
+              </ng-container>
+            </select>
+
+          </div>
+        </div>
+
+      </form>
+      <button *ngIf="selectedQuestionFormGroup.get('settings').get('isImp').value == 'true'"
+        class="btn btn-success" style="margin-top: 0px;float: right;" (click)="addSkipLogicQuestion()">Add
+        Question</button>
+
+    </div>
+  </div>
+</div>
+<div class="d-flex justify-content-end" style="padding: 0px 16px 5px 16px;">
+  <button class="btn btn-success" data-dismiss="modal" style="float: right;">Cancel</button>
+  <button type="submit" class="btn btn-success" style="float: right;">
+    Save Settings</button>
+</div>
+</form>
+ -->

@@ -1,0 +1,137 @@
+textarea {
+  outline: none !important;
+  border:1px solid #DDDDDD;
+  color: #444444;
+}
+.tabledata::-webkit-scrollbar {
+  width: 9px; /* width of the entire scrollbar */
+  display: none; //for displaying none//
+}
+
+// .tabledata::-webkit-scrollbar-track {
+//   background: orange; /* color of the tracking area */
+// }
+
+.tabledata::-webkit-scrollbar-thumb {
+  background-color: #656768; /* color of the scroll thumb */
+  border-radius: 10px; /* roundness of the scroll thumb */
+}
+// .tabledata::-webkit-scrollbar {
+//   display: none;
+// }
+.tabledata::-webkit-scrollbar-corner {
+  display: none;
+}
+
+// .tabledata::-webkit-scrollbar-button {
+//   background-color: #3a3b3c;
+// }
+
+
+
+.setting-img{
+  position: absolute;
+  right: 34px;
+  top: 6px;
+  cursor: pointer;
+  height: 20px;
+}
+.delete-img{
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  cursor: pointer;
+  height: 25px;
+}
+
+.questionform-array{
+  border-radius: 8px;
+  position: relative;
+  background-color: #f4f4f4;
+  margin-top: 20px;
+}
+.question-select{
+  border-top: none; margin-right: 10px;
+  border-right: none;
+  border-left: none;
+  border-radius: 0px;
+}
+
+.draggable {
+  background-color: lightblue; /* Default background color */
+}
+
+.draggable.dragging {
+  background-color: lightgreen; /* Color while dragging */
+}
+
+
+
+/* in-flight clone */
+.gu-mirror {
+position: fixed !important;
+margin: 0 !important;
+z-index: 9999 !important;
+opacity: 0.8;
+-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+filter: alpha(opacity=80);
+pointer-events: none;
+}
+/* high-performance display:none; helper */
+.gu-hide {
+left: -9999px !important;
+}
+/* added to mirrorContainer (default = body) while dragging */
+.gu-unselectable {
+-webkit-user-select: none !important;
+-moz-user-select: none !important;
+-ms-user-select: none !important;
+user-select: none !important;
+}
+/* added to the source element while its mirror is dragged */
+.gu-transit {
+opacity: 0.2;
+-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+filter: alpha(opacity=20);
+}
+
+
+.input-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.item-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.item input[type="number"] {
+  width: 60px;
+}
+
+.item button {
+  padding: 5px 10px;
+}
+
+@media (max-width: 600px) {
+  .item-list {
+    flex-direction: column;
+  }
+
+  .item {
+    width: 100%;
+  }
+}

@@ -1,0 +1,58 @@
+textarea {
+    outline: none !important;
+    border:1px solid #DDDDDD;
+    color: #444444;
+  }
+  .tabledata::-webkit-scrollbar {
+    width: 9px; /* width of the entire scrollbar */
+    display: none; //for displaying none//
+  }
+  
+  // .tabledata::-webkit-scrollbar-track {
+  //   background: orange; /* color of the tracking area */
+  // }
+  
+  .tabledata::-webkit-scrollbar-thumb {
+    background-color: #656768; /* color of the scroll thumb */
+    border-radius: 10px; /* roundness of the scroll thumb */
+  }
+  // .tabledata::-webkit-scrollbar {
+  //   display: none;
+  // }
+  .tabledata::-webkit-scrollbar-corner {
+    display: none;
+  }
+  
+  // .tabledata::-webkit-scrollbar-button {
+  //   background-color: #3a3b3c;
+  // }
+  
+
+
+  .setting-img{
+    position: absolute;
+    right: 34px;
+    top: 6px;
+    cursor: pointer;
+    height: 20px;
+  }
+  .delete-img{
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    cursor: pointer;
+    height: 25px;
+  }
+
+  .questionform-array{
+    border-radius: 8px;
+    position: relative;
+    background-color: #f4f4f4;
+    margin-top: 20px;
+  }
+  .question-select{
+    border-top: none; margin-right: 10px;
+    border-right: none;
+    border-left: none;
+    border-radius: 0px;
+  }

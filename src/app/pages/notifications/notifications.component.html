@@ -1,0 +1,277 @@
+<div class="row">
+  <!-- <div class="row"> -->
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header row">
+        <div class="col-sm-6 col-12">
+          <h4 class="card-title float-left">LIST OF NOTIFICATIONS</h4>
+        </div>
+        <div class="col-sm-6 col-12"> <button type="button" class="btn  btn-success float-right" data-toggle="modal"
+            (click)="open()" data-target="#addModal">SEND
+            NOTIFICATION</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div>
+          <div *ngIf="loading" class="text-center container">
+            <i class="fa fa-spin fa-spinner fa-5x"></i> <br />
+          </div>
+          <div class="scroll">
+            <table *ngIf="!loading" class="table">
+              <thead class=" text-primary">
+
+                <th style="text-align: center;">
+                  #
+                </th>
+                <th>
+                  Title
+                </th>
+                <th>
+                  Body
+                </th>
+                <th class="pl-0">
+                  Filter
+                </th>
+                <th class="pl-0">
+                  Added on
+                </th>
+                <th class="text-right">
+                  Action
+                </th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let notif of notiflist; index as i">
+                  <td style="text-align: center;">
+                    {{i+1}}
+                  </td>
+                  <!-- <td>
+                    <img width="50px" height="40px" *ngIf="notif.image != ''" [src]="service.url + '/' + notif.image"
+                      alt="">
+                    <img width="50px" height="40px" *ngIf="notif.image == ''" src="assets/thumbnail.png" alt="">
+                  </td> -->
+                  <td>
+                    {{notif.title}}
+                  </td>
+                  <td>
+                    {{notif.body}}
+                  </td>
+                  <td *ngIf="notif.user=='All'">
+                    All Users
+                  </td>
+                  <td *ngIf="notif.user !='All'">
+                    Filtered
+                  </td>
+                  <td>{{notif.createdAt | date: 'short'}}</td>
+
+
+                  <td class="text-right">
+                    <div class="d-flex  align-items-center">
+                   
+                      <img src="assets/delete.png" (click)="deletenotif(notif._id)" style="cursor: pointer;margin-left: 8px;"
+                       height="18px" alt="" srcset="">
+
+                    </div>
+
+
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!-- <p style="color: red;">{{error}}</p> -->
+    </div>
+  </div>
+</div>
+
+<!-- <div *ngIf='noQuestion'>
+      <h3> There is no notif in the list</h3>
+  </div> -->
+
+
+<!-- add Notif Model -->
+<div id="addModal" data-backdrop="static" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-xl">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="row" style="margin-top: 20px;margin-bottom: 60px;">
+        <div class="offset-1 col-md-10 col-10 px-1">
+          <div class="form-group">
+            <h4>NOTIFICATION</h4>
+            <form action="" [formGroup]="notifForm" (ngSubmit)="createNotif()">
+              <!-- <div class="row"> -->
+              <div class="col-12">
+                <label>Title</label>
+                <input formControlName="title" name="11" placeholder="Title" class="form-control height" type="text"
+                  id="selasd">
+              </div>
+              <div class="col-12 mt-2">
+                <label>Message</label>
+                <textarea formControlName="body" name="11" placeholder="Message" class="form-control height" type="text"
+                  id="selasd"></textarea>
+              </div>
+
+              <div class="col-12 mt-2">
+                <label for="type2">Filter</label>
+                <select formControlName="user" name="type2" class="form-control" id="exampleFormControlSelect332">
+                  <option value="All">All Users</option>
+                  <option value="selected">Selected Users</option>
+                </select>
+              </div>
+              <form action="" [formGroup]="notifForm.get('filter')">
+
+                <div class="col-12 mt-2" *ngIf="notifForm.get('user').value == 'selected'">
+                  <label for="gender">Users that have not completed surveys</label>
+                  <select formControlName="usersWithIncompleteSurveys" name="type2" class="form-control"
+                    id="exampleFormControlSelect33">
+                    <option [value]="true">Yes</option>
+                    <option [value]="false">No</option>
+                 
+                  </select>
+                </div>
+                <div class="col-12 mt-2" *ngIf="notifForm.get('user').value == 'selected'">
+                  <label for="gender">Gender</label>
+                  <select formControlName="selectedGender" name="type2" class="form-control"
+                    id="exampleFormControlSelect33">
+                    <option [value]="'All'">All</option>
+                    <option [value]="'Male'">Male</option>
+                    <option [value]="'Female'">Female</option>
+                    <option [value]="'Female'">Other</option>
+                    <option [value]="'FemaleOther'">Female & Other</option>
+                    <option [value]="'MaleFemale'">Male & Female</option>
+                    <option [value]="'MaleOther'">Male & Other</option>
+                  </select>
+                </div>
+
+                <div class="col-12 mt-2" *ngIf="notifForm.get('user').value == 'selected'">
+                  <h6>Select target age</h6>
+
+                  <label for="name">From</label>
+                  <div class="input-group mb-3">
+                    <input formControlName="from" type="number" class="form-control"
+                      (keyup)="valuechange($event,'from')" style="border: 1px solid #DDDDDD;"
+                      placeholder="Enter start age">
+                  </div>
+
+
+                </div>
+                <div class="col-12 mt-2" *ngIf="notifForm.get('user').value == 'selected'">
+                  <label for="name">To</label>
+                  <div class="input-group mb-3">
+                    <input formControlName="to" type="number" class="form-control" (keyup)="valuechange($event,'to')"
+                      style="border: 1px solid #DDDDDD;" placeholder="Enter ending age">
+                  </div>
+
+
+                </div>
+                <div class="col-12 mt-2" *ngIf="notifForm.get('user').value == 'selected'">
+                  <label for="name">Exact Age</label>
+                  <div class="input-group mb-3">
+                    <input formControlName="exactAge" type="number" class="form-control"
+                      (keyup)="valuechange($event,'exactAge')" style="border: 1px solid #DDDDDD;"
+                      placeholder="Enter Exact age">
+                  </div>
+                </div>
+
+              </form>
+
+              <div class="col-12 mt-2">
+                <label for="surveyStatus">Survey Status</label>
+                <select formControlName="surveyStatus" name="type2" class="form-control"
+                  id="exampleFormControlSelect33">
+                  <option [value]="'1'">Active</option>
+                  <option [value]="'0'">InActive</option>
+
+                </select>
+              </div>
+
+
+
+              <!-- <div class="col-12 mt-2">
+                <label for=" event">Event</label>
+                <select formControlName="eventId" placeholder="Please Select" name="type2" class="form-control"
+                id="exampleFormControlSelect33">
+                <option value="deal" *ngFor="let data of eventList" [value]="data._id">{{data.name}}</option>
+              </select>
+              
+            </div> -->
+              <h6 class="mt-3 ml-3">Select target location</h6>
+              <!-- <div class="col-12 pl-md-3 mt-3">
+                <label for="fileupload">Add Image</label><br>
+                <img *ngIf="notifForm.get('image').value !== '' && notifForm.get('image').value !== null"
+                  style="border-radius:9px;height: 90px; width: 90px;" class="circle"
+                  [src]="service.url + '/' + notifForm.get('image').value" />
+                <img *ngIf="notifForm.get('image').value == '' || notifForm.get('image').value == null"
+                  style="border-radius:9px; height: 90px; width: 90px;" class="circle" src="assets/thumbnail.png" />
+                <input type="file" required placeholder="Choose File" (change)="select_pic($event)">
+
+
+
+                <div class="custom-file" style="display: none;">
+                  <input style="height: 150px;" (change)="select_pic($event)" type="file" class="custom-file-input"
+                    id="inputGroupFile01">
+                </div>
+              </div> -->
+
+              <button style="float: right;margin-bottom: 20px;margin-top: 30px;" (click)="close_add()" type="button"
+                class="btn btn-danger" data-dismiss="modal">Close</button>
+              <button style="float: right;margin-bottom: 20px;margin-top: 30px;" type="submit"
+                class="btn btn-success">Send</button>
+
+
+              <!-- </div> -->
+            </form>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <!-- Date Selection Model -->
+  <!-- <div id="date_select " class="modal fade " role="dialog ">
+  <div class="modal-dialog ">
+
+    <div class="modal-content " style="margin-top: 50px;padding: 40px 20px 0px 20px; ">
+
+      <legend>{{'general.selectdate' | translate}}</legend>
+      <form style="margin-top: 30px; ">
+
+        <div class="row ">
+          <div class="col-md-6 pr-md-1 ">
+            <div class="form-group ">
+              <label>{{'general.startdate' | translate}}</label>
+              <input formControlName="start_date " name="start_date " type="date " class="form-control "
+                placeholder="Start Date ">
+            </div>
+          </div>
+          <div class="col-md-6 pl-md-1 ">
+            <div class="form-group ">
+              <label>{{'general.enddate' | translate}}</label>
+              <input formControlName="end_date " name="end_date " type="date " class="form-control "
+                placeholder="End Date ">
+            </div>
+          </div>
+        </div>
+
+        <div class="row ">
+          <div class="update ml-auto mr-auto ">
+            <button style="float: right;margin-bottom: 20px;margin-top: 30px; " type="button " class="btn btn-danger "
+              data-dismiss="modal ">{{'general.close' |
+              translate}}</button>
+            <button style="float: right;margin-bottom: 20px;margin-top: 30px; " type="button " class="btn btn-success "
+              data-dismiss="modal " (click)="import() ">{{'general.submit' |
+              translate}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</div> -->

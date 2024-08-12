@@ -1,0 +1,377 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-md-4 col-lg-3 col-sm-12">
+            <h4 class="card-title float-left">User Given Response</h4>
+          </div>
+          <div class="col-md-8 col-lg-9 col-sm-12">
+          </div>
+        </div>
+
+      </div>
+      <div class="card-body">
+        
+        <div>
+          <p>{{surveyForm.desc}}</p>
+          <div *ngFor="let question of surveyForm.question;index as i">
+            <!-- Quesition 1-->
+            <div *ngIf="question.key == 'selectOne'">
+              <div style="font-weight: bold;">
+                Q.{{i+1}} <span *ngIf="question.settings.isImp == true" style="color: red;">*</span> {{question.title}}
+              </div>
+
+               
+              <div *ngIf="question.hint != ''" style="font-size: 10px;font-style: italic;margin-left: 25px;">
+                {{question.hint}}</div>
+              <div class="d-flex flex-column">
+                <div class="d-flex" *ngFor="let optionValue of question.options;index as j">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" (change)="selectOption($event,question)"
+                      [(ngModel)]="question.answer" type="radio" name="question{{i}}" [value]="optionValue.option">
+                    <label class="form-check-label" for="inlineRadio2">{{optionValue.option}}</label>
+                  </div>
+                  <div>
+                  </div>
+                </div>
+                <div
+                  *ngIf="question.settings.isImp == 'true' && question.settings.errorMessage != '' && question.answer == ''"
+                  class="text-danger" style="font-weight: bold;">{{question.settings.errorMessage}}</div>
+              </div>
+            </div>
+            <!-- Quesition 2-->
+            <div *ngIf="question.key == 'selectMany'">
+              <div style="font-weight: bold;">
+                Q.{{i+1}} <span *ngIf="question.settings.isImp == true" style="color: red;">*</span> {{question.title}}
+              </div>
+              <div *ngIf="question.hint != ''" style="font-size: 10px;font-style: italic;margin-left: 25px;">
+                {{question.hint}}</div>
+              <div class="d-flex flex-column">
+                <div class="d-flex" *ngFor="let optionValue of question.options;index as j">
+                  <div class="form-check form-check-inline">
+                    <label class="form-check-label" for="question{{ i }}">
+                      {{optionValue.option}} </label>
+                    <input type="checkbox" (change)="selectOptionMulti($event,question,optionValue)"
+                      [(ngModel)]="optionValue.checked" id="question{{ i }}" name="question{{ i }}"
+                      style="visibility: visible;opacity: 22;">
+                  </div>
+                  <div>
+                  </div>
+                </div>
+                <div
+                  *ngIf="question.settings.isImp == 'true' && question.settings.errorMessage != '' && question.answer == ''"
+                  class="text-danger" style="font-weight: bold;">{{question.settings.errorMessage}}</div>
+              </div>
+            </div>
+            <!-- question 3 -->
+            <div *ngIf="question.key == 'text'">
+              <div style="font-weight: bold;">
+                Q.{{i+1}} <span *ngIf="question.settings.isImp == true" style="color: red;">*</span> {{question.title}}
+              </div>
+              <div *ngIf="question.hint != ''" style="font-size: 10px;font-style: italic;margin-left: 25px;">
+                {{question.hint}}</div>
+              <div class="d-flex flex-column">
+                <div class="form-group">
+
+                  <input class="form-control" type="text" [(ngModel)]="question.answer" id="question{{ i }}"
+                    name="question{{ i }}">
+                </div>
+                <div
+                  *ngIf="question.settings.isImp == 'true' && question.settings.errorMessage != '' && question.answer == ''"
+                  class="text-danger" style="font-weight: bold;">{{question.settings.errorMessage}}</div>
+              </div>
+            </div>
+            <!-- question 4 -->
+            <div *ngIf="question.key == 'number'">
+              <div style="font-weight: bold;">
+                Q.{{i+1}} <span *ngIf="question.settings.isImp == true" style="color: red;">*</span> {{question.title}}
+              </div>
+              <div *ngIf="question.hint != ''" style="font-size: 10px;font-style: italic;margin-left: 25px;">
+                {{question.hint}}</div>
+              <div class="d-flex flex-column">
+                <div class="form-group">
+
+                  <input class="form-control" type="number" [(ngModel)]="question.answer" id="question{{ i }}"
+                    name="question{{ i }}">
+                </div>
+                <div
+                  *ngIf="question.settings.isImp == 'true' && question.settings.errorMessage != '' && question.answer == ''"
+                  class="text-danger" style="font-weight: bold;">{{question.settings.errorMessage}}</div>
+              </div>
+            </div>
+            <!-- question 5 -->
+            <div *ngIf="question.key == 'location'">
+              <div style="font-weight: bold;">
+                Q.{{i+1}} <span *ngIf="question.settings.isImp == true" style="color: red;">*</span> {{question.title}}
+              </div>
+              <div *ngIf="question.hint != ''" style="font-size: 10px;font-style: italic;margin-left: 25px;">
+                {{question.hint}}</div>
+              <div class="d-flex flex-column">
+                <div class="form-group mt-2">
+
+                  <input class="form-control" type="text" [(ngModel)]="question.answer" id="question{{ i }}"
+                    name="question{{ i }}">
+                </div>
+                <div
+                  *ngIf="question.settings.isImp == 'true' && question.settings.errorMessage != '' && question.answer == ''"
+                  class="text-danger" style="font-weight: bold;">{{question.settings.errorMessage}}</div>
+              </div>
+            </div>
+            <!-- question 6 -->
+            <div *ngIf="question.key == 'photo'">
+              <div style="font-weight: bold;">
+                Q.{{i+1}} <span *ngIf="question.settings.isImp == true" style="color: red;">*</span> {{question.title}}
+              </div>
+              <div *ngIf="question.hint != ''" style="font-size: 10px;font-style: italic;margin-left: 25px;">
+                {{question.hint}}</div>
+              <div class="d-flex flex-column">
+                <div class="form-group mt-2">
+                  add image
+
+                </div>
+                <div
+                  *ngIf="question.settings.isImp == 'true' && question.settings.errorMessage != '' && question.answer == ''"
+                  class="text-danger" style="font-weight: bold;">{{question.settings.errorMessage}}</div>
+              </div>
+            </div>
+
+            <!-- Quesition 7-->
+            <div *ngIf="question.key == 'rating'">
+              <div style="font-weight: bold;">
+                Q.{{i+1}} <span *ngIf="question.settings.isImp == true" style="color: red;">*</span> {{question.title}}
+              </div>
+              <div *ngIf="question.hint != ''" style="font-size: 10px;font-style: italic;margin-left: 25px;">
+                {{question.hint}}</div>
+              <div class="d-flex flex-column">
+                <div class="form-group">
+
+                  <input class="form-control" type="text" [(ngModel)]="question.answer" id="question{{ i }}"
+                    name="question{{ i }}">
+                </div>
+                <div
+                  *ngIf="question.settings.isImp == 'true' && question.settings.errorMessage != '' && question.answer == ''"
+                  class="text-danger" style="font-weight: bold;">{{question.settings.errorMessage}}</div>
+              </div>
+            </div>            
+
+            <!-- Quesition 8-->
+            <div *ngIf="question.key == 'datetime'">
+              <div style="font-weight: bold;">
+                Q.{{i+1}} <span *ngIf="question.settings.isImp == true" style="color: red;">*</span> {{question.title}}
+              </div>
+              <div *ngIf="question.hint != ''" style="font-size: 10px;font-style: italic;margin-left: 25px;">
+                {{question.hint}}</div>
+              <div class="d-flex flex-column">
+                <div class="form-group mt-2">
+                  <input class="form-control" [(ngModel)]="question.answer" type="datetime-local" name="question{{i}}">
+
+                </div>
+                <div
+                  *ngIf="question.settings.isImp == 'true' && question.settings.errorMessage != '' && question.answer == ''"
+                  class="text-danger" style="font-weight: bold;">{{question.settings.errorMessage}}</div>
+              </div>
+            </div>
+
+
+
+
+
+            <!-- sub questions -->
+            <div>
+              <div *ngFor="let subquestion of question?.subQuestion;index as k">
+                <!-- subquestion 1 -->
+                <div *ngIf="subquestion.key == 'selectOne'">
+                  <div style="font-weight: bold;">
+                    Q. {{i+1}}.{{k+1}} <span *ngIf="subquestion.settings.isImp == true" style="color: red;">*</span>
+                    {{subquestion.title}}
+                  </div>
+                  <div *ngIf="subquestion.hint != ''" style="font-size: 10px;font-style: italic;margin-left: 25px;">
+                    {{subquestion.hint}}</div>
+                  <div class="d-flex flex-column">
+                    <div class="d-flex" *ngFor="let optionValue of subquestion.options;index as j">
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" [(ngModel)]="subquestion.answer" type="radio"
+                          name="subquestion{{k}}" [value]="optionValue.option">
+                        <label class="form-check-label" for="subquestion{{k}}">{{optionValue.option}}</label>
+                      </div>
+                      <div>
+                      </div>
+                    </div>
+                    <div
+                      *ngIf="subquestion.settings.isImp == 'true' && subquestion.settings.errorMessage != '' && subquestion.answer == ''"
+                      class="text-danger" style="font-weight: bold;">{{subquestion.settings.errorMessage}}</div>
+                  </div>
+                </div>
+                <!-- subquestion 2 -->
+                <div *ngIf="subquestion.key == 'text'" class="mb-3">
+                  <div style="font-weight: bold;">
+                    Q. {{i+1}}.{{k+1}} <span *ngIf="subquestion.settings.isImp == true" style="color: red;">*</span>
+                    {{subquestion.title}}
+                  </div>
+                  <div class="d-flex flex-column">
+                    <input class="form-control" placeholder="{{subquestion.hint}}" [(ngModel)]="subquestion.answer"
+                      type="text" name="subquestion{{k}}">
+                    <div
+                      *ngIf="subquestion.settings.isImp == 'true' && subquestion.settings.errorMessage != '' && subquestion.settings.errorMessage == ''"
+                      class="text-danger" style="font-weight: bold;">{{subquestion.settings.errorMessage}}</div>
+                  </div>
+                </div>
+                <!-- subquestion 3 -->
+                <div *ngIf="subquestion.key == 'selectMany'">
+                  <div style="font-weight: bold;">
+                    Q.{{i+1}}.{{k+1}} <span *ngIf="subquestion.settings.isImp == true" style="color: red;">*</span>
+                    {{subquestion.title}}
+                  </div>
+                  <div *ngIf="subquestion.hint != ''" style="font-size: 10px;font-style: italic;margin-left: 25px;">
+                    {{subquestion.hint}}</div>
+                  <div class="d-flex flex-column">
+                    <div class="d-flex" *ngFor="let optionValue of subquestion.options;index as j">
+                      <div class="form-check form-check-inline">
+                        <label class="form-check-label" for="subquestion{{ i }}">
+                          {{optionValue.option}} </label>
+                        <input type="checkbox" (change)="selectOptionMulti($event,subquestion,optionValue)"
+                          [(ngModel)]="optionValue.checked" id="subquestion{{ i }}" name="subquestion{{ i }}"
+                          style="visibility: visible;opacity: 22;">
+                      </div>
+                      <div>
+                      </div>
+                    </div>
+                    <div
+                      *ngIf="subquestion.settings.isImp == 'true' && subquestion.settings.errorMessage != '' && subquestion.answer == ''"
+                      class="text-danger" style="font-weight: bold;">{{subquestion.settings.errorMessage}}</div>
+                  </div>
+                </div>
+                <!-- subquestion 3 -->
+                <div *ngIf="subquestion.key == 'text'">
+                  <div style="font-weight: bold;">
+                    Q.{{i+1}}.{{k+1}} <span *ngIf="subquestion.settings.isImp == true" style="color: red;">*</span>
+                    {{subquestion.title}}
+                  </div>
+                  <div *ngIf="subquestion.hint != ''" style="font-size: 10px;font-style: italic;margin-left: 25px;">
+                    {{subquestion.hint}}</div>
+                  <div class="d-flex flex-column">
+                    <div class="form-group">
+
+                      <input class="form-control" type="text" [(ngModel)]="subquestion.answer" id="subquestion{{ i }}"
+                        name="subquestion{{ i }}">
+                    </div>
+                    <div
+                      *ngIf="subquestion.settings.isImp == 'true' && subquestion.settings.errorMessage != '' && subquestion.answer == ''"
+                      class="text-danger" style="font-weight: bold;">{{subquestion.settings.errorMessage}}</div>
+                  </div>
+                </div>
+                <!-- subquestion 4 -->
+                <div *ngIf="subquestion.key == 'number'">
+                  <div style="font-weight: bold;">
+                    Q.{{i+1}}.{{k+1}} <span *ngIf="subquestion.settings.isImp == true" style="color: red;">*</span>
+                    {{subquestion.title}}
+                  </div>
+                  <div *ngIf="subquestion.hint != ''" style="font-size: 10px;font-style: italic;margin-left: 25px;">
+                    {{subquestion.hint}}</div>
+                  <div class="d-flex flex-column">
+                    <div class="form-group">
+
+                      <input class="form-control" type="number" [(ngModel)]="subquestion.answer" id="subquestion{{ i }}"
+                        name="subquestion{{ i }}">
+                    </div>
+                    <div
+                      *ngIf="subquestion.settings.isImp == 'true' && subquestion.settings.errorMessage != '' && subquestion.answer == ''"
+                      class="text-danger" style="font-weight: bold;">{{subquestion.settings.errorMessage}}</div>
+                  </div>
+                </div>
+                <!-- subquestion 5 -->
+                <div *ngIf="subquestion.key == 'location'">
+                  <div style="font-weight: bold;">
+                    Q.{{i+1}}.{{k+1}} <span *ngIf="subquestion.settings.isImp == true" style="color: red;">*</span>
+                    {{subquestion.title}}
+                  </div>
+                  <div *ngIf="subquestion.hint != ''" style="font-size: 10px;font-style: italic;margin-left: 25px;">
+                    {{subquestion.hint}}</div>
+                  <div class="d-flex flex-column">
+                    <div class="form-group mt-2">
+
+                      <input class="form-control" type="text" [(ngModel)]="subquestion.answer" id="subquestion{{ i }}"
+                        name="subquestion{{ i }}">
+                    </div>
+                    <div
+                      *ngIf="subquestion.settings.isImp == 'true' && subquestion.settings.errorMessage != '' && subquestion.answer == ''"
+                      class="text-danger" style="font-weight: bold;">{{subquestion.settings.errorMessage}}</div>
+                  </div>
+                </div>
+                <!-- subquestion 6 -->
+                <div *ngIf="subquestion.key == 'photo'">
+                  <div style="font-weight: bold;">
+                    Q.{{i+1}}.{{k+1}} <span *ngIf="subquestion.settings.isImp == true" style="color: red;">*</span>
+                    {{subquestion.title}}
+                  </div>
+                  <div *ngIf="subquestion.hint != ''" style="font-size: 10px;font-style: italic;margin-left: 25px;">
+                    {{subquestion.hint}}</div>
+                  <div class="d-flex flex-column">
+                    <div class="form-group mt-2">
+                      add image
+
+                    </div>
+                    <div
+                      *ngIf="subquestion.settings.isImp == 'true' && subquestion.settings.errorMessage != '' && subquestion.answer == ''"
+                      class="text-danger" style="font-weight: bold;">{{subquestion.settings.errorMessage}}</div>
+                  </div>
+                </div>
+
+                <!-- Quesition 7-->
+                <div *ngIf="subquestion.key == 'rating'">
+                  <div style="font-weight: bold;">
+                    Q.{{i+1}}.{{k+1}} <span *ngIf="subquestion.settings.isImp == true" style="color: red;">*</span>
+                    {{subquestion.title}}
+                  </div>
+                  <div *ngIf="subquestion.hint != ''" style="font-size: 10px;font-style: italic;margin-left: 25px;">
+                    {{subquestion.hint}}</div>
+                  <div class="d-flex flex-column">
+                    <div class="d-flex" *ngFor="let optionValue of subquestion.options;index as j">
+                      <div class="form-check form-check-inline ">
+                        <input class="form-check-input" (change)="selectOption($event,subquestion)"
+                          [(ngModel)]="subquestion.answer" type="radio" name="subquestion{{i}}"
+                          [value]="optionValue.option">
+                        <label class="form-check-label" for="inlineRadio2">{{optionValue.option}}</label>
+                      </div>
+                      <div>
+                      </div>
+                    </div>
+                    <div
+                      *ngIf="subquestion.settings.isImp == 'true' && subquestion.settings.errorMessage != '' && subquestion.answer == ''"
+                      class="text-danger" style="font-weight: bold;">{{subquestion.settings.errorMessage}}</div>
+                  </div>
+                </div>
+
+                <!-- Quesition 8-->
+                <div *ngIf="subquestion.key == 'datetime'">
+                  <div style="font-weight: bold;">
+                    Q.{{i+1}}.{{k+1}} <span *ngIf="subquestion.settings.isImp == true" style="color: red;">*</span>
+                    {{subquestion.title}}
+                  </div>
+                  <div *ngIf="subquestion.hint != ''" style="font-size: 10px;font-style: italic;margin-left: 25px;">
+                    {{subquestion.hint}}</div>
+                  <div class="d-flex flex-column">
+                    <div class="form-group mt-2">
+                      <input class="form-control" [(ngModel)]="subquestion.answer" type="datetime-local"
+                        name="subquestion{{i}}">
+
+                    </div>
+                    <div
+                      *ngIf="subquestion.settings.isImp == 'true' && subquestion.settings.errorMessage != '' && subquestion.answer == ''"
+                      class="text-danger" style="font-weight: bold;">{{subquestion.settings.errorMessage}}</div>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" (click)="exportDataToExcel()" class="btn btn-success"
+              style="min-height: 7vh; width: 23%;float: right;">
+              Convert to Excel</button>
+    
+  </div>

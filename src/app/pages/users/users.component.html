@@ -1,0 +1,182 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-md-4 col-lg-3 col-sm-12">
+            <h4 class="card-title float-left">List of Users</h4>
+
+          </div>
+          <div class="col-md-8 col-lg-9 col-sm-12">
+            <div class="search-hero " style="width:70%;display: inline-block;margin-top: 10px;">
+              <input class="form-control" type="text" name="search" style="height: 37px;" [(ngModel)]="searchText"
+                autocomplete="off" placeholder="Search by user name, user phone or anything...">
+            </div>
+            <button type="button" class="btn btn-success float-right" data-toggle="modal" data-target="#addModal"
+              data-backdrop="static">Add user</button>
+
+          </div>
+
+        </div>
+      </div>
+      <div class="card-body">
+        <div>
+          <div *ngIf="loader" class="text-center container">
+            <i class="fa fa-spin fa-spinner fa-5x"></i> <br />
+          </div>
+          <div class="tabledata" style="overflow-x: scroll;">
+
+            <table *ngIf="!loader" class="table">
+              <thead>
+
+                <th>#</th>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Download</th>
+                <th>Points</th>
+                <th>Phone</th>
+                <th>Gender</th>
+                <th>Added on</th>
+                <th>Status</th>
+                <th class="text-right">Action</th>
+              </thead>
+              <tbody *ngFor="let data of userList |filter:searchText; index as i">
+                <tr>
+                  <td>{{i+1}}</td>
+
+                  <td>
+                    <img *ngIf="data.image!=''&& data.image!=null" src="{{service.url+data.image}}" alt=""
+                      style="width: 70px;height: 70px; border-radius: 9px;">
+                    <img *ngIf="data.image=='' || data.image==null" src="assets/images/thumbnail.png" alt=""
+                      style="width: 70px;height: 70px; border-radius: 9px;">
+
+                  </td>
+                  <td *ngIf="data.firstName!=''">{{data.firstName}}</td>
+                  <td *ngIf="data.name==''">-</td>
+                  <td *ngIf="data.email!=''">{{data.email}}</td>
+                  <td *ngIf="data.email==''">-</td>
+                  <td><button class="btn btn-success btn-sm" (click)="downloadUser(data._id)"
+                      style="background-color: #28a745;">Download</button></td>
+                  <td *ngIf="data.points!=''">{{data.points}}</td>
+                  <td *ngIf="data.points==''">-</td>
+                  <td>{{data.phoneCode}} {{data.phone}}</td>
+                  <td>{{data.gender}} </td>
+                  <td>{{data.createdAt | date: 'short'}}</td>
+
+                  <td>
+                    <p style="font-size: 16px; font-weight: bold;" class="text-success" *ngIf="data.status=='1'">Active
+                    </p>
+                    <p style="font-size: 16px; font-weight: bold;" class="text-danger" *ngIf="data.status=='0'">InActive
+                    </p>
+                  </td>
+
+                  <td class="text-right">
+                    <div class="d-flex justify-content-end">
+
+
+                      <img (click)="editUser(data)" role="button" data-toggle="modal" data-target="#addModal"
+                        src="assets/edit.png" alt="" height="15px" style="padding-left: 15px;">
+                      <img (click)="deleteUser(data._id)" role="button" src="assets/delete.png" alt="" height="15px"
+                        style="padding-left: 15px;">
+                    </div>
+                  </td>
+                </tr>
+
+              </tbody>
+
+            </table>
+          </div>
+
+
+        </div>
+
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- add user Model -->
+<div id="addModal" class="modal fade" data-backdrop="static" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="d-flex justify-content-center ">
+        <form action="" [formGroup]="userForm" (ngSubmit)="submitUser()" style="width: 90%;">
+          <div class="form-group">
+            <h4 *ngIf="userForm.value._id == null">Add User</h4>
+            <h4 *ngIf="userForm.value._id != null">Edit User</h4>
+            <label for="name">Name</label>
+            <input formControlName="name" style="margin-bottom: 10px;" type="text" class="form-control"
+              placeholder="Enter name">
+
+            <label for="email">Email</label>
+            <input formControlName="email" [attr.disabled]="userForm.value._id" style="margin-bottom: 10px;"
+              type="email" class="form-control" placeholder="Enter email">
+
+            <label>Phone Code</label>
+            <div class="input-group mb-3">
+              <select class="custom-select" [attr.disabled]="userForm.value._id" formControlName="phoneCode"
+                id="inputGroupSelect02">
+                <option [value]="data.dial_code" *ngFor="let data of countryCodes">{{data.code}} {{data.dial_code}}
+                </option>
+              </select>
+            </div>
+
+
+            <label for="phone">Phone<span style="color: #c52222;">*</span></label>
+            <input formControlName="phone" [attr.disabled]="userForm.value._id" style="margin-bottom: 10px;" type="text"
+              class="form-control" placeholder="Enter phone no">
+
+
+            <label for="type">Gender</label>
+            <div class="input-group mb-3">
+              <select class="custom-select" formControlName="gender" id="inputGroupSelect02">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <label for="age">Age<span style="color: #c52222;">*</span></label>
+            <input formControlName="age" [attr.disabled]="userForm.value._id" style="margin-bottom: 10px;" type="number"
+              class="form-control" placeholder="Enter Age">
+            <label for="address">Address</label>
+            <input formControlName="address" style="margin-bottom: 10px;" type="text" class="form-control"
+              placeholder="Enter Address">
+            <div class="row mt-2">
+              <div class="form-group pic">
+                <label for="fileupload">Add Image</label><br>
+                <img *ngIf="userForm.value.image !== '' && userForm.value.image !== null"
+                  style="border-radius:9px; height: 90px; width: 90px;" class="circle"
+                  [src]="service.url + userForm.value.image" />
+                <img *ngIf="userForm.value.image == '' || userForm.value.image == null"
+                  style="border-radius:9px; height: 90px;width: 90px;" class="circle"
+                  src="assets/images/thumbnail.png" />
+                <input type="file" required placeholder="Choose File" (change)="getImage($event)">
+              </div>
+            </div>
+            <label>Status</label>
+            <div class="input-group mb-3">
+              <select class="custom-select" formControlName="status" id="inputGroupSelect02">
+                <option value="1">Active</option>
+                <option value="0">In Active</option>
+              </select>
+            </div>
+            <button style="float: right;margin-bottom: 20px;margin-top: 30px;" type="button" class="btn btn-danger"
+              data-dismiss="modal" id="close" (click)="close()">Close</button>
+            <button style="float: right;margin-bottom: 20px;margin-top: 30px;" type="submit" class="btn btn-success"
+              *ngIf="userForm.value._id == null">Add</button>
+            <button style="float: right;margin-bottom: 20px;margin-top: 30px;" type="submit" class="btn btn-success"
+              *ngIf="userForm.value._id != null">Update</button>
+
+          </div>
+        </form>
+      </div>
+
+    </div>
+
+  </div>
+</div>

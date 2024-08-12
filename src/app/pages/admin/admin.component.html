@@ -1,0 +1,190 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-md-4 col-lg-3 col-sm-12">
+            <h4 class="card-title float-left">List of Admins</h4>
+
+          </div>
+          <div class="col-md-8 col-lg-9 col-sm-12">
+            <div class="search-hero " style="width:70%;display: inline-block;margin-top: 10px;">
+              <form>
+                <input class="form-control" type="text" name="search" style="height: 37px;" [(ngModel)]="searchText"
+                  autocomplete="off" placeholder="Search by admin name, email address, or anything...">
+              </form>
+            </div>
+            <button type="button" class="btn btn-success float-right" data-toggle="modal" data-target="#addModal"
+              data-backdrop="static">Add Admin</button>
+
+          </div>
+
+        </div>
+      </div>
+      <div *ngIf="loader" class="text-center container">
+        <i class="fa fa-spin fa-spinner fa-5x"></i> <br />
+      </div>
+      <div *ngIf="!loader" class="card-body">
+
+
+        <div class="tabledata" style="overflow-x: scroll;">
+          <table class="table">
+            <thead>
+
+              <th>#</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Email Address</th>
+              <th>Added on</th>
+              <th>Role</th>
+              <th>Status</th>
+              <th class="text-right">Action</th>
+            </thead>
+            <tbody *ngFor="let data of adminlist | filter:searchText; index as i">
+              <tr>
+
+                <td>{{i+1}}</td>
+                <td>{{data.firstName}}</td>
+                <td>{{data.lastName}}</td>
+                <td>{{data.email}}</td>
+                <td>{{data.createdAt | date: 'short'}}</td>
+                <td style="text-transform: capitalize;">{{data.role}}</td>
+                <td>
+                  <p style="font-size: 16px; font-weight: bold;" class="text-success" *ngIf="data.status=='1'">Active
+                  </p>
+                  <p style="font-size: 16px; font-weight: bold;" class="text-danger" *ngIf="data.status=='0'">InActive
+                  </p>
+                </td>
+                <!-- <td>
+                    {{admin.role?.name}}
+                  </td> -->
+
+                <td class="text-right">
+                  <img (click)="editadmin(data)" data-toggle="modal" role="button" data-target="#editModal"
+                    src="assets/edit.png" alt="" height="15px" style="padding-left: 15px;">
+                  <img (click)="deleteadmin(data._id)" role="button" src="assets/delete.png" alt="" height="15px"
+                    style="padding-left: 15px;">
+                </td>
+              </tr>
+
+            </tbody>
+
+          </table>
+
+
+        </div>
+
+
+      </div>
+
+      <p>{{error}}</p>
+    </div>
+  </div>
+</div>
+
+<!-- <div *ngIf='noAdmin'>
+  <h3> There is no admin in the list</h3>
+</div> -->
+
+<!-- add Admin Model -->
+<div id="addModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <!-- <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Modal Header</h4>
+          </div> -->
+      <div class="d-flex justify-content-center ">
+        <div class="form-group" style="width: 90%;">
+          <h4>Add Admin</h4>
+
+          <label for="firstName">First Name</label>
+          <input [(ngModel)]="admin.firstName" style="margin-bottom: 10px;" type="text" class="form-control"
+            placeholder="First Name">
+
+          <label for="lastName">Last Name</label>
+          <input [(ngModel)]="admin.lastName" style="margin-bottom: 10px;" type="text" class="form-control"
+            placeholder="Last Name">
+
+          <label for="email">Email</label>
+          <input [(ngModel)]="admin.email" style="margin-bottom: 10px;" type="email" (keyup)="check()"
+            pattern="[A-Za-z0-9._%+-]{3,}@[a-zA-Z]{3,}([.]{1}[a-zA-Z]{2,}|[.]{1}[a-zA-Z]{2,}[.]{1}[a-zA-Z]{2,})"
+            class="form-control" placeholder="Email Address">
+          <!-- <span *ngIf="!admin.email.valid && admin.email.touched" class="text-danger">Please Enter Your Email</span> -->
+
+          <label for="password">Password</label>
+          <input [(ngModel)]="admin.password" type="text" class="form-control" placeholder="Password">
+
+          <!-- Dropdown menu -->
+          <label for="role">Role</label>
+          <select [(ngModel)]="admin.role" class="form-control" style="margin-bottom: 10px;">
+            <option value="" disabled selected>Select Role</option>
+            <option value="admin">Admin</option>
+            <option value="user">User</option>
+          </select>
+
+          <button style="float: right; margin-bottom: 20px; margin-top: 30px;" type="button" class="btn btn-danger"
+            data-dismiss="modal" (click)="close_add()">Close</button>
+          <button style="float: right; margin-bottom: 20px; margin-top: 30px;" type="button" class="btn btn-success"
+            data-dismiss="modal" (click)="submitadmin()">Add</button>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+
+<!-- edit Admin Model -->
+<div id="editModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+
+      <div class="d-flex justify-content-center ">
+        <div class="form-group" style="width: 90%;">
+          <h4>Edit Admin</h4>
+          <label for="firstName">First Name</label>
+          <input [(ngModel)]="editadmindata.firstName" style="margin-bottom: 10px;" type="text" class="form-control"
+            placeholder="First Name">
+
+          <label for="lastName">Last Name</label>
+          <input [(ngModel)]="editadmindata.lastName" style="margin-bottom: 10px;" type="text" class="form-control"
+            placeholder="Last Name">
+
+          <label for="email">Email</label>
+          <input [(ngModel)]="editadmindata.email" disabled style="margin-bottom: 10px;" type="text"
+            class="form-control" placeholder="Edit question">
+
+
+
+          <label for="password">Password</label>
+
+          <input [(ngModel)]="editadmindata.password" placeholder="******" style="margin-bottom: 10px;" type="password"
+            class="form-control">
+          <label for="status">Status</label>
+
+          <div class="input-group mb-3">
+            <select class="custom-select" [(ngModel)]="editadmindata.status" id="inputGroupSelect02">
+              <option value="1">Active</option>
+              <option value="0">InActive</option>
+            </select>
+
+          </div>
+          <button style="float: right;margin-bottom: 20px;margin-top: 30px;" type="button" class="btn btn-danger"
+            data-dismiss="modal" (click)="close()">Close</button>
+          <button style="float: right;margin-bottom: 20px;margin-top: 30px;" type="button" class="btn btn-success"
+            data-dismiss="modal" (click)="updateadmin()">Update</button>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>

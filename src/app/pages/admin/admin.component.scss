@@ -1,0 +1,23 @@
+.tabledata::-webkit-scrollbar {
+  width: 9px; /* width of the entire scrollbar */
+  display: none; //for displaying none//
+}
+
+// .tabledata::-webkit-scrollbar-track {
+//   background: orange; /* color of the tracking area */
+// }
+
+.tabledata::-webkit-scrollbar-thumb {
+  background-color: #656768; /* color of the scroll thumb */
+  border-radius: 10px; /* roundness of the scroll thumb */
+}
+// .tabledata::-webkit-scrollbar {
+//   display: none;
+// }
+.tabledata::-webkit-scrollbar-corner {
+  display: none;
+}
+
+// .tabledata::-webkit-scrollbar-button {
+//   background-color: #3a3b3c;
+// }

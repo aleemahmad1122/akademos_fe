@@ -1,0 +1,220 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-md-4 col-lg-3 col-sm-12">
+            <h4 class="card-title float-left">Pending User Rewards</h4>
+
+          </div>
+          <div class="col-md-8 col-lg-9 col-sm-12">
+            <div class="search-hero " style="width:70%;display: inline-block;margin-top: 10px;">
+              <input class="form-control" type="text" name="search" style="height: 37px;" [(ngModel)]="searchText"
+                autocomplete="off" placeholder="Search by Full Name">
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+      <div *ngIf="loader" class="text-center container">
+        <i class="fa fa-spin fa-spinner fa-5x"></i> <br />
+      </div>
+      <div *ngIf="!loader" class="card-body">
+
+
+        <div class="tabledata" style="overflow-x: scroll;">
+          <table class="table">
+            <thead>
+
+              <th>#</th>
+              <th>Full Name</th>
+              <th>Phone Number</th>
+              <th>Payment Method</th>
+              <th>Points</th>
+              <th class="text-right">Action</th>
+            </thead>
+            <tbody *ngFor="let data of rewardlist | filter:searchText; index as i">
+              <tr>
+
+                <td>{{i+1}}</td>
+                <td>{{data.fullName || "N/A"}}</td>
+                <td>{{data.phone || "N/A"}}</td>
+                <td>{{data.paymentMethod || "N/A"}}</td>
+                <td>{{data.points || "N/A"}}</td>
+
+
+
+                <td class="text-right">
+                  <img (click)="editreward(data)" data-toggle="modal" role="button" data-target="#editModal"
+                    src="assets/edit.png" alt="" height="15px" style="padding-left: 15px;">
+                </td>
+              </tr>
+
+            </tbody>
+
+          </table>
+
+
+        </div>
+
+
+      </div>
+
+      <p>{{error}}</p>
+    </div>
+  </div>
+</div>
+
+
+<!-- add Reward Model -->
+<div id="addModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="d-flex justify-content-center ">
+        <div class="form-group" style="width: 90%;">
+          <h4>Add Reward</h4>
+          <label for="name">Name</label>
+          <input [(ngModel)]="reward.name" style="margin-bottom: 10px;" type="text" class="form-control"
+            placeholder="First Name">
+
+          <label for="desc">Description</label>
+          <input [(ngModel)]="reward.desc" style="margin-bottom: 10px;" type="text" class="form-control"
+            placeholder="Enter description">
+
+          <label for="desc">Reward Points</label>
+          <input [(ngModel)]="reward.rewardPoints" style="margin-bottom: 10px;" type="number" class="form-control"
+            placeholder="Enter description">
+
+          <div>
+
+          </div>
+
+
+          <label for="email">Status</label>
+          <div class="input-group mb-3">
+            <select class="custom-select" [(ngModel)]="reward.status" id="inputGroupSelect02">
+              <option value="1">Active</option>
+              <option value="0">InActive</option>
+            </select>
+
+          </div>
+
+          <button (click)="triggerFileInput()">Select Image</button>
+          <input type="file" #fileInput (change)="onFileChange($event)" multiple style="display: none;"
+            accept="image/*">
+          <div *ngFor="let image of base64Images;let i = index">
+            <img [src]="image" alt="Selected Image" width="100"
+              style="margin: 10px; border: 1px solid #ddd; border-radius: 4px; padding: 5px; width: 150px;">
+            <button (click)="removeImage(i)">Remove</button>
+          </div>
+
+
+
+          <button style="float: right;margin-bottom: 20px;margin-top: 30px;" type="button" class="btn btn-danger"
+            data-dismiss="modal" (click)="close_add()">Close</button>
+          <button style="float: right;margin-bottom: 20px;margin-top: 30px;" type="button" class="btn btn-success"
+            data-dismiss="modal" (click)="submitreward()">Add</button>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- edit Reward Model -->
+<div id="editModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+
+      <div class="d-flex justify-content-center ">
+        <div class="form-group" style="width: 90%;">
+          <h4>Add Reward</h4>
+          <label for="name">Name</label>
+          <input [(ngModel)]="editrewarddata.name" style="margin-bottom: 10px;" type="text" class="form-control"
+            placeholder="First Name">
+
+          <label for="desc">Description</label>
+          <input [(ngModel)]="editrewarddata.desc" style="margin-bottom: 10px;" type="text" class="form-control"
+            placeholder="Enter description">
+
+          <label for="desc">Reward Points</label>
+          <input [(ngModel)]="editrewarddata.rewardPoints" style="margin-bottom: 10px;" type="number"
+            class="form-control" placeholder="Enter description">
+
+          <label for="email">Edit Images</label>
+          <div>
+
+
+            <div class="d-flex" style="justify-content: space-between;">
+
+              <label for="fileupload">Image</label><br>
+              <button class="plusimage" (click)="fucntioncall2()" style="background-color: #4AD361;"><i
+                  class="fa fa-plus"></i></button>
+              <input type="file" id="check2" hidden required placeholder="Choose File"
+                (change)="getImage($event,'edit')">
+
+
+
+            </div>
+            <div class="d-flex" style="overflow-x: scroll;">
+              <div class="form-group pic" *ngFor="let data of editrewarddata.images; index as i"
+                style="position: relative;">
+
+
+                <div class="d-flex" style="margin-left: 5px;">
+
+                  <img *ngIf="data !== '' && data !== null" class="circle" [src]="service.url + data" height="100px"
+                    width="100px" style="border-radius:9px" />
+
+                  <img src="assets/images/delete.png" (click)=removeImageUpdate(i)
+                    style="position: absolute; right: 1%; height: 25px;" alt="">
+                </div>
+
+              </div>
+              <div class="form-group pic" *ngIf="editrewarddata.images.length == 0;" style="position: relative;">
+
+
+                <div class="d-flex" style="margin-left: 5px;">
+
+
+                  <img class="circle" src="assets/images/thumbnail.png" style="border-radius:9px" height="100px" />
+
+                </div>
+
+              </div>
+
+
+            </div>
+
+          </div>
+
+
+          <label for="email">Status</label>
+          <div class="input-group mb-3">
+            <select class="custom-select" [(ngModel)]="editrewarddata.status" id="inputGroupSelect02">
+              <option value="1">Active</option>
+              <option value="0">InActive</option>
+            </select>
+
+          </div>
+
+
+
+          <button style="float: right;margin-bottom: 20px;margin-top: 30px;" type="button" class="btn btn-danger"
+            data-dismiss="modal" (click)="close()">Close</button>
+          <button style="float: right;margin-bottom: 20px;margin-top: 30px;" type="button" class="btn btn-success"
+            data-dismiss="modal" (click)="updatereward()">Update</button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>

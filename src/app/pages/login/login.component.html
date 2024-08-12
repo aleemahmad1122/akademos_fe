@@ -1,0 +1,145 @@
+<div class="backimage col" style="height: 100%">
+
+
+  <div class="container animated fadeInDown">
+    <div class="row">
+      <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+        <div class="card card-signin my-5">
+          <div class="card-body">
+            <div *ngIf="no_forget">
+              <img src="assets/images/logo.png" alt="" style="display: block;margin: auto;width: 200px;">
+
+              <form [formGroup]='myForm' (ngSubmit)="onSubmit()" style="width: 70%;margin: auto;">
+                <!-- <h2 style="text-align: center;color: white;">LOGIN</h2> -->
+                <div style="color: red;" class="row justify-content-center">
+                  {{error}}
+                </div>
+                <div class="form-group" style="margin-top: 20px;">
+                  <label style="color:black;">Email address</label>
+                  <input type="email" class="form-control " id="exampleInputEmail1" aria-describedby="emailHelp"
+                    formControlName="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+                  <!-- <small *ngIf="!myForm.get('email').valid && myForm.get('email').touched" id="emailHelp"
+                    style="color: black;">Please enter valid email address.</small> -->
+                </div>
+                <div class="form-group ">
+                  <label style="color:black;">Password</label>
+                  <div class="input-group">
+                    <input type="password" class="form-control" [type]="fieldTextType ? 'text' : 'password'"
+                      id="exampleInputPassword1" formControlName="password">
+                    <div class="input-group-append">
+                      <span class="input-group-text">
+                        <!-- <i
+                            class="fa"
+                            [ngClass]="{
+                              'fa-eye-slash': !fieldTextType,
+                              'fa-eye': fieldTextType 
+                            }"
+                            (click)="toggleFieldTextType()"
+                          ></i> -->
+                        <i class="fa fa-eye-slash" *ngIf="!fieldTextType" style="color: black;"
+                          (click)="toggleFieldTextType()"></i>
+                        <i class="fa fa-eye" *ngIf="fieldTextType" style="color: blue;"
+                          (click)="toggleFieldTextType()"></i>
+                      </span>
+                    </div>
+                  </div>
+                  <!-- <small *ngIf="!myForm.get('password').valid && myForm.get('password').touched"
+                    style="color: black;">Please enter password.</small> -->
+                </div>
+                <!-- <a type="submit" (click)="forget()" style=" margin-left: 67%;font-size: 9px;color:blue;"><strong>Forget
+                    Password?</strong></a> -->
+                <button style="margin: auto;display: block;margin-top: 20px;width: 130px;margin-bottom: 20px;"
+                  type="submit" class="btn btn-success" *ngIf="!loader">Login</button>
+              </form>
+
+
+              <div class="text-center" *ngIf="loader">
+                <div class="spinner-border" role="status">
+                  <span class="sr-only">Loading...</span>
+                </div>
+              </div>
+              <!-- <button style="margin: auto;display: block;margin-top: 20px;width: 130px;margin-bottom: 20px;" onclick="forget()" type="submit" class="btn btn-primary">Forget Password</button> -->
+
+
+            </div>
+            <div *ngIf="!no_forget">
+              <div *ngIf="!email">
+                <form [formGroup]='myForm1' (ngSubmit)="onSubmit1()" style="width: 70%;margin: auto;">
+                  <!-- <h2 style="text-align: center;color: white;">LOGIN</h2> -->
+                  <div style="color: red;" class="row justify-content-center">
+                    {{error1}}
+                  </div>
+                  <div class="form-group" style="margin-top: 20px;">
+                    <label style="color:black;">Email </label>
+                    <input type="email" class="form-control " id="exampleInputEmail1" aria-describedby="emailHelp"
+                      formControlName="email">
+                    <!-- <small *ngIf="!myForm.get('email').valid && myForm.get('email').touched" id="emailHelp"
+                      style="color: black;">Please enter valid email address.</small> -->
+                  </div>
+
+
+                  <button style="margin: auto;display: block;margin-top: 20px;width: 130px;" type="submit"
+                    class="btn btn-primary">Next</button>
+                </form>
+              </div>
+              <div *ngIf="email">
+                <div *ngIf="fcm">
+                  <form [formGroup]='myForm2' (ngSubmit)="onSubmit2()" style="width: 70%;margin: auto;">
+                    <!-- <h2 style="text-align: center;color: white;">LOGIN</h2> -->
+                    <div style="color: red;" class="row justify-content-center">
+                      {{error2}}
+                    </div>
+                    <div class="form-group" style="margin-top: 20px;">
+                      <label style="color:black;">Code </label>
+                      <input type="email" class="form-control " id="exampleInputEmail1" aria-describedby="emailHelp"
+                        formControlName="code">
+                      <!-- <small *ngIf="!myForm.get('email').valid && myForm.get('email').touched" id="emailHelp"
+                        style="color: black;">Please enter valid email address.</small> -->
+                    </div>
+
+
+                    <button style="margin: auto;display: block;margin-top: 20px;width: 130px;" type="submit"
+                      class="btn btn-primary">Next</button>
+                  </form>
+                </div>
+                <div *ngIf="!fcm" style="width: 70%;margin: auto;">
+
+                  <div style="color: red;" class="row justify-content-center">
+                    {{error3}}
+                  </div>
+                  <div class="form-group ">
+                    <label style="color:black;">New Password</label>
+                    <input type="password" name="confirmpswd" class="form-control " id="exampleInputPassword1"
+                      [(ngModel)]="confrimpassword">
+                    <!-- <small *ngIf="!myForm.get('password').valid && myForm.get('password').touched"
+                      style="color: black;">Please enter password.</small> -->
+                  </div>
+                  <div class="form-group ">
+                    <label style="color:black;">Password</label>
+                    <input type="password" class="form-control " name="password" id="exampleInputPassword2"
+                      [(ngModel)]="password">
+                    <!-- <small *ngIf="!myForm.get('password').valid && myForm.get('password').touched"
+                      style="color: black;">Please enter password.</small> -->
+                  </div>
+
+
+                  <button style="margin: auto;display: block;margin-top: 20px;width: 130px;" (click)="Password()"
+                    type="submit" class="btn btn-primary">Next</button>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+
+
+
+
+</div>
