@@ -169,7 +169,7 @@
           <label style="font-weight: bold;" for="desc">Pay</label>
           <input [(ngModel)]="editrewarddata.rewardPoints" style="margin-bottom: 10px;" type="number"
             class="form-control" placeholder="Enter points" min="0.01" [max]="points" step="0.01" required>
-          <div *ngIf="rewardPointsInvalid()" style="color: red;">
+          <div *ngIf="rewardPointsInvalid()" style="color: red; font-size: 12px; margin-top: -10px;">
             Please enter a value greater than 0 and less than {{points}}.
           </div>
 
