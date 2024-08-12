@@ -46,7 +46,7 @@ export class RewardsComponent implements OnInit {
 
 
   loader = false;
-  reward = {
+  reward: any = {
     rewardPoints: 0
   };
   editrewarddata = {
