@@ -129,9 +129,8 @@
                   <label for="paymentMethod" class="form-label">Payment Method</label>
                   <select id="paymentMethod" class="form-select" formControlName="paymentMethod">
                     <option value="">Select payment method</option>
-                    <option value="creditCard">Credit Card</option>
-                    <option value="paypal">PayPal</option>
-                    <option value="bankTransfer">Bank Transfer</option>
+                    <option value="jazzcash">Jazz Cash</option>
+                    <option value="easypaisa">Easypaisa </option>
                   </select>
                 </div>
 
@@ -193,6 +192,7 @@
                     <option value="married">Married</option>
                     <option value="divorced">Divorced</option>
                     <option value="widowed">Widowed</option>
+                    <option value="other">Other</option>
                   </select>
                 </div>
 
@@ -200,7 +200,9 @@
                 <div class="d-flex align-items-center  justify-content-end" style="gap: 4px;">
 
                   <button style="float: right;margin-bottom: 20px;margin-top: 30px;" type="submit"
-                    class="btn btn-dark">Apply</button>
+                    class="btn btn-success">Apply</button>
+                  <button style="float: right;margin-bottom: 20px;margin-top: 30px;" (click)="clearAllFilters()"
+                    type="button" class="btn btn-dark">Clear All Filters</button>
 
                   <button style="float: right;margin-bottom: 20px;margin-top: 30px;" type="button"
                     class="btn btn-danger" data-dismiss="modal" (click)="close()">Close</button>
@@ -290,13 +292,7 @@
         <div class="d-flex justify-content-center ">
           <div class="form-group" style="width: 90%;">
             <h4>Update</h4>
-            <!-- <label for="name">Name</label>
-          <input [(ngModel)]="editrewarddata.name" style="margin-bottom: 10px;" type="text" class="form-control"
-            placeholder="First Name">
 
-          <label for="desc">Description</label>
-          <input [(ngModel)]="editrewarddata.desc" style="margin-bottom: 10px;" type="text" class="form-control"
-            placeholder="Enter description"> -->
 
             <div>
               <label style="font-weight: bold;" for="desc">Full Name: </label>
@@ -327,62 +323,6 @@
               Please enter a value greater than 0 and less than {{points}}.
             </div>
 
-            <!-- <label for="email">Edit Images</label>
-          <div>
-
-
-            <div class="d-flex" style="justify-content: space-between;">
-
-              <label for="fileupload">Image</label><br>
-              <button class="plusimage" (click)="fucntioncall2()" style="background-color: #4AD361;"><i
-                  class="fa fa-plus"></i></button>
-              <input type="file" id="check2" hidden required placeholder="Choose File"
-                (change)="getImage($event,'edit')">
-
-
-
-            </div>
-            <div class="d-flex" style="overflow-x: scroll;">
-              <div class="form-group pic" *ngFor="let data of editrewarddata.images; index as i"
-                style="position: relative;">
-
-
-                <div class="d-flex" style="margin-left: 5px;">
-
-                  <img *ngIf="data !== '' && data !== null" class="circle" [src]="service.url + data" height="100px"
-                    width="100px" style="border-radius:9px" />
-
-                  <img src="assets/images/delete.png" (click)=removeImageUpdate(i)
-                    style="position: absolute; right: 1%; height: 25px;" alt="">
-                </div>
-
-              </div>
-              <div class="form-group pic" *ngIf="editrewarddata.images.length == 0;" style="position: relative;">
-
-
-                <div class="d-flex" style="margin-left: 5px;">
-
-
-                  <img class="circle" src="assets/images/thumbnail.png" style="border-radius:9px" height="100px" />
-
-                </div>
-
-              </div>
-
-
-            </div>
-
-          </div> -->
-
-
-            <!-- <label for="email">Status</label>
-          <div class="input-group mb-3">
-            <select class="custom-select" [(ngModel)]="editrewarddata.status" id="inputGroupSelect02">
-              <option value="1">Active</option>
-              <option value="0">InActive</option>
-            </select>
-
-          </div> -->
 
 
 

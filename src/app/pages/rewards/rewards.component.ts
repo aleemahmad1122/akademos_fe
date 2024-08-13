@@ -103,6 +103,23 @@ export class RewardsComponent implements OnInit {
     this.userForm.patchValue({ fullName: null });
     this.getAllReward()
   }
+  clearAllFilters(): void {
+    this.userForm.patchValue({
+      fullName: null,
+      minPoints: null,
+      maxPoints: null,
+      paymentMethod: null,
+      gender: null,
+      minAge: null,
+      maxAge: null,
+      minIncome: null,
+      maxIncome: null,
+      status: null,
+      occupation: null,
+      maritalStatus: null
+    });
+    this.getAllReward()
+  }
   showFiltersFnc(): void {
     this.showFilters = !this.showFilters;
   }
@@ -293,9 +310,7 @@ export class RewardsComponent implements OnInit {
     return points === null || points <= 0 || points > this.points;
   }
   updatereward() {
-    console.log(this.editrewarddata.rewardPoints)
-
-    this.surveyService.updateReward(this.editrewarddata._id, { points: this.editrewarddata.rewardPoints }).subscribe(_ => {
+    this.surveyService.updateReward(this.editrewarddata._id, { points: (this.points - this.editrewarddata.rewardPoints) }).subscribe(_ => {
       if (_.status == 1) {
         this.close()
         this.toastr.success('Reward is updated', 'Success !', {
