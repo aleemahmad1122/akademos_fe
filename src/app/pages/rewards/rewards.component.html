@@ -3,16 +3,31 @@
     <div class="card">
       <div class="card-header">
         <div class="row">
-          <div class="col-md-4 col-lg-3 col-sm-12">
-            <h4 class="card-title float-left">Pending User Rewards</h4>
+          <div class="  d-flex align-items-center justify-content-between w-100 flex-wrap px-3">
+            <h4 class="card-title float-left ">Pending User Rewards</h4>
 
-          </div>
-          <div class="col-md-8 col-lg-9 col-sm-12">
-            <div class="search-hero " style="width:70%;display: inline-block;margin-top: 10px;">
-              <input class="form-control" type="text" name="search" style="height: 37px;" [(ngModel)]="searchText"
-                autocomplete="off" placeholder="Search by Full Name">
-            </div>
+            <form [formGroup]="userForm" (ngSubmit)="onSubmit()"
+              class="col-md-8 col-lg-9 col-sm-12 d-flex align-items-center  justify-content-between"
+              style="gap: 8px;margin: 0 auto;">
+              <div class=" form-control d-flex align-items-center w-100 re-search" style="gap: 2px;">
+                <input type="text" name="search" style="width: 100%;height: 100%;" autocomplete="off"
+                  placeholder="Search by Full Name" id="fullName" formControlName="fullName">
+                <span *ngIf="userForm.value.fullName" (click)="clearFullName()" class="material-symbols-outlined"
+                  style="cursor: pointer; font-size: 20px;">
+                  close
+                </span>
 
+              </div>
+
+              <button type="submit" class="btn btn-primary" [disabled]="!userForm.value.fullName">Submit</button>
+
+
+            </form>
+
+            <span (click)="showFiltersFnc()" class="material-symbols-outlined" style="cursor: pointer;"
+              data-toggle="modal" role="button" data-target="#filterModal">
+              tune
+            </span>
           </div>
 
         </div>
@@ -30,17 +45,31 @@
               <th>#</th>
               <th>Full Name</th>
               <th>Phone Number</th>
+              <th>Gender</th>
               <th>Payment Method</th>
+              <th>City</th>
               <th>Points</th>
               <th class="text-right">Action</th>
             </thead>
-            <tbody *ngFor="let data of rewardlist | filter:searchText; index as i">
+            <tbody *ngFor="let data of rewardlist; index as i">
               <tr>
 
                 <td>{{i+1}}</td>
                 <td>{{data.fullName || "N/A"}}</td>
                 <td>{{data.phone || "N/A"}}</td>
-                <td>{{data.paymentMethod || "N/A"}}</td>
+                <td class="text-capitalize">{{data.gender || "N/A"}}</td>
+                <td>
+                  <ng-container *ngIf="data.paymentMethod; else noPaymentMethod">
+                    <figure class="w-100" style="height: 70px;">
+                      <img [width]="90" class="h-100" style="object-fit: contain;"
+                        [src]="data.paymentMethod === 'jazzcash' ? 'assets/jazz.png' : 'assets/easy.png'"
+                        [alt]="data.paymentMethod">
+                    </figure>
+                  </ng-container>
+                  <ng-template #noPaymentMethod>N/A</ng-template>
+                </td>
+
+                <td>{{data.city || "N/A"}}</td>
                 <td>{{data.points || "N/A"}}</td>
 
 
@@ -64,79 +93,204 @@
       <p>{{error}}</p>
     </div>
   </div>
-</div>
 
 
-<!-- add Reward Model -->
-<div id="addModal" class="modal fade" role="dialog">
-  <div class="modal-dialog">
+  <!-- filter Reward Model -->
+  <div id="filterModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
 
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="d-flex justify-content-center ">
-        <div class="form-group" style="width: 90%;">
-          <h4>Add Reward</h4>
-          <label for="name">Name</label>
-          <input [(ngModel)]="reward.name" style="margin-bottom: 10px;" type="text" class="form-control"
-            placeholder="First Name">
+      <!-- Modal content-->
+      <div class="modal-content">
 
-          <label for="desc">Description</label>
-          <input [(ngModel)]="reward.desc" style="margin-bottom: 10px;" type="text" class="form-control"
-            placeholder="Enter description">
+        <div class="d-flex justify-content-center ">
+          <div class="form-group" style="width: 90%;">
+            <h4>Filters</h4>
 
-          <label for="desc">Reward Points</label>
-          <input [(ngModel)]="reward.rewardPoints" style="margin-bottom: 10px;" type="number" class="form-control"
-            placeholder="Enter description">
 
-          <div>
+            <div class="container mt-4">
+              <h2>User Information Form</h2>
 
+              <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+
+
+                <div class="mb-3">
+                  <label for="minPoints" class="form-label">Minimum Points</label>
+                  <input type="number" class="form-control" id="minPoints" formControlName="minPoints"
+                    placeholder="Enter minimum points">
+                </div>
+
+                <div class="mb-3">
+                  <label for="maxPoints" class="form-label">Maximum Points</label>
+                  <input type="number" class="form-control" id="maxPoints" formControlName="maxPoints"
+                    placeholder="Enter maximum points">
+                </div>
+
+                <div class="mb-3">
+                  <label for="paymentMethod" class="form-label">Payment Method</label>
+                  <select id="paymentMethod" class="form-select" formControlName="paymentMethod">
+                    <option value="">Select payment method</option>
+                    <option value="creditCard">Credit Card</option>
+                    <option value="paypal">PayPal</option>
+                    <option value="bankTransfer">Bank Transfer</option>
+                  </select>
+                </div>
+
+                <div class="mb-3">
+                  <label for="gender" class="form-label">Gender</label>
+                  <select id="gender" class="form-select" formControlName="gender">
+                    <option value="">Select gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+
+                <div class="mb-3">
+                  <label for="minAge" class="form-label">Minimum Age</label>
+                  <input type="number" class="form-control" id="minAge" formControlName="minAge"
+                    placeholder="Enter minimum age">
+                </div>
+
+                <div class="mb-3">
+                  <label for="maxAge" class="form-label">Maximum Age</label>
+                  <input type="number" class="form-control" id="maxAge" formControlName="maxAge"
+                    placeholder="Enter maximum age">
+                </div>
+
+                <div class="mb-3">
+                  <label for="minIncome" class="form-label">Minimum Income</label>
+                  <input type="number" class="form-control" id="minIncome" formControlName="minIncome"
+                    placeholder="Enter minimum income">
+                </div>
+
+                <div class="mb-3">
+                  <label for="maxIncome" class="form-label">Maximum Income</label>
+                  <input type="number" class="form-control" id="maxIncome" formControlName="maxIncome"
+                    placeholder="Enter maximum income">
+                </div>
+
+                <div class="mb-3">
+                  <label for="status" class="form-label">Status</label>
+                  <select id="status" class="form-select" formControlName="status">
+                    <option value="">Select status</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                    <option value="pending">Pending</option>
+                  </select>
+                </div>
+
+                <div class="mb-3">
+                  <label for="occupation" class="form-label">Occupation</label>
+                  <input type="text" class="form-control" id="occupation" formControlName="occupation"
+                    placeholder="Enter your occupation">
+                </div>
+
+                <div class="mb-3">
+                  <label for="maritalStatus" class="form-label">Marital Status</label>
+                  <select id="maritalStatus" class="form-select" formControlName="maritalStatus">
+                    <option value="">Select marital status</option>
+                    <option value="single">Single</option>
+                    <option value="married">Married</option>
+                    <option value="divorced">Divorced</option>
+                    <option value="widowed">Widowed</option>
+                  </select>
+                </div>
+
+
+                <div class="d-flex align-items-center  justify-content-end" style="gap: 4px;">
+
+                  <button style="float: right;margin-bottom: 20px;margin-top: 30px;" type="submit"
+                    class="btn btn-dark">Apply</button>
+
+                  <button style="float: right;margin-bottom: 20px;margin-top: 30px;" type="button"
+                    class="btn btn-danger" data-dismiss="modal" (click)="close()">Close</button>
+                </div>
+
+              </form>
+
+
+
+            </div>
           </div>
-
-
-          <label for="email">Status</label>
-          <div class="input-group mb-3">
-            <select class="custom-select" [(ngModel)]="reward.status" id="inputGroupSelect02">
-              <option value="1">Active</option>
-              <option value="0">InActive</option>
-            </select>
-
-          </div>
-
-          <button (click)="triggerFileInput()">Select Image</button>
-          <input type="file" #fileInput (change)="onFileChange($event)" multiple style="display: none;"
-            accept="image/*">
-          <div *ngFor="let image of base64Images;let i = index">
-            <img [src]="image" alt="Selected Image" width="100"
-              style="margin: 10px; border: 1px solid #ddd; border-radius: 4px; padding: 5px; width: 150px;">
-            <button (click)="removeImage(i)">Remove</button>
-          </div>
-
-
-
-          <button style="float: right;margin-bottom: 20px;margin-top: 30px;" type="button" class="btn btn-danger"
-            data-dismiss="modal" (click)="close_add()">Close</button>
-          <button style="float: right;margin-bottom: 20px;margin-top: 30px;" type="button" class="btn btn-success"
-            data-dismiss="modal" (click)="submitreward()">Add</button>
 
         </div>
-      </div>
 
+      </div>
     </div>
 
   </div>
-</div>
 
-<!-- edit Reward Model -->
-<div id="editModal" class="modal fade" role="dialog">
-  <div class="modal-dialog">
 
-    <!-- Modal content-->
-    <div class="modal-content">
+  <!-- add Reward Model -->
+  <div id="addModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
 
-      <div class="d-flex justify-content-center ">
-        <div class="form-group" style="width: 90%;">
-          <h4>Update</h4>
-          <!-- <label for="name">Name</label>
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="d-flex justify-content-center ">
+          <div class="form-group" style="width: 90%;">
+            <h4>Add Reward</h4>
+            <label for="name">Name</label>
+            <input [(ngModel)]="reward.name" style="margin-bottom: 10px;" type="text" class="form-control"
+              placeholder="First Name">
+
+            <label for="desc">Description</label>
+            <input [(ngModel)]="reward.desc" style="margin-bottom: 10px;" type="text" class="form-control"
+              placeholder="Enter description">
+
+            <label for="desc">Reward Points</label>
+            <input [(ngModel)]="reward.rewardPoints" style="margin-bottom: 10px;" type="number" class="form-control"
+              placeholder="Enter description">
+
+            <div>
+
+            </div>
+
+
+            <label for="email">Status</label>
+            <div class="input-group mb-3">
+              <select class="custom-select" [(ngModel)]="reward.status" id="inputGroupSelect02">
+                <option value="1">Active</option>
+                <option value="0">InActive</option>
+              </select>
+
+            </div>
+
+            <button (click)="triggerFileInput()">Select Image</button>
+            <input type="file" #fileInput (change)="onFileChange($event)" multiple style="display: none;"
+              accept="image/*">
+            <div *ngFor="let image of base64Images;let i = index">
+              <img [src]="image" alt="Selected Image" width="100"
+                style="margin: 10px; border: 1px solid #ddd; border-radius: 4px; padding: 5px; width: 150px;">
+              <button (click)="removeImage(i)">Remove</button>
+            </div>
+
+
+
+            <button style="float: right;margin-bottom: 20px;margin-top: 30px;" type="button" class="btn btn-danger"
+              data-dismiss="modal" (click)="close_add()">Close</button>
+            <button style="float: right;margin-bottom: 20px;margin-top: 30px;" type="button" class="btn btn-success"
+              data-dismiss="modal" (click)="submitreward()">Add</button>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- edit Reward Model -->
+  <div id="editModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+
+        <div class="d-flex justify-content-center ">
+          <div class="form-group" style="width: 90%;">
+            <h4>Update</h4>
+            <!-- <label for="name">Name</label>
           <input [(ngModel)]="editrewarddata.name" style="margin-bottom: 10px;" type="text" class="form-control"
             placeholder="First Name">
 
@@ -144,36 +298,36 @@
           <input [(ngModel)]="editrewarddata.desc" style="margin-bottom: 10px;" type="text" class="form-control"
             placeholder="Enter description"> -->
 
-          <div>
-            <label style="font-weight: bold;" for="desc">Full Name: </label>
-            <span>{{" "}}{{ fullName || "N/A"}}</span>
-          </div>
+            <div>
+              <label style="font-weight: bold;" for="desc">Full Name: </label>
+              <span>{{" "}}{{ fullName || "N/A"}}</span>
+            </div>
 
-          <div>
-            <label style="font-weight: bold;" for="desc">Number: </label>
-            <span>{{" "}}{{ phone || "N/A"}}</span>
-          </div>
-
-
-          <div>
-            <label style="font-weight: bold;" for="desc">Payment Method: </label>
-            <span>{{" "}}{{ paymentMethod || "N/A"}}</span>
-          </div>
+            <div>
+              <label style="font-weight: bold;" for="desc">Number: </label>
+              <span>{{" "}}{{ phone || "N/A"}}</span>
+            </div>
 
 
-          <div>
-            <label style="font-weight: bold;" for="desc">Total Point: </label>
-            <span>{{" "}}{{ points || "N/A"}}</span>
-          </div>
+            <div>
+              <label style="font-weight: bold;" for="desc">Payment Method: </label>
+              <span>{{" "}}{{ paymentMethod || "N/A"}}</span>
+            </div>
 
-          <label style="font-weight: bold;" for="desc">Pay</label>
-          <input [(ngModel)]="editrewarddata.rewardPoints" style="margin-bottom: 10px;" type="number"
-            class="form-control" placeholder="Enter points" min="0.01" [max]="points" step="0.01" required>
-          <div *ngIf="rewardPointsInvalid()" style="color: red; font-size: 12px; margin-top: -10px;">
-            Please enter a value greater than 0 and less than {{points}}.
-          </div>
 
-          <!-- <label for="email">Edit Images</label>
+            <div>
+              <label style="font-weight: bold;" for="desc">Total Point: </label>
+              <span>{{" "}}{{ points || "N/A"}}</span>
+            </div>
+
+            <label style="font-weight: bold;" for="desc">Pay</label>
+            <input [(ngModel)]="editrewarddata.rewardPoints" style="margin-bottom: 10px;" type="number"
+              class="form-control" placeholder="Enter points" min="0.01" [max]="points" step="0.01" required>
+            <div *ngIf="rewardPointsInvalid()" style="color: red; font-size: 12px; margin-top: -10px;">
+              Please enter a value greater than 0 and less than {{points}}.
+            </div>
+
+            <!-- <label for="email">Edit Images</label>
           <div>
 
 
@@ -221,7 +375,7 @@
           </div> -->
 
 
-          <!-- <label for="email">Status</label>
+            <!-- <label for="email">Status</label>
           <div class="input-group mb-3">
             <select class="custom-select" [(ngModel)]="editrewarddata.status" id="inputGroupSelect02">
               <option value="1">Active</option>
@@ -232,14 +386,14 @@
 
 
 
-          <button style="float: right;margin-bottom: 20px;margin-top: 30px;" type="button" class="btn btn-danger"
-            data-dismiss="modal" (click)="close()">Close</button>
-          <button style="float: right;margin-bottom: 20px;margin-top: 30px;" type="button" class="btn btn-success"
-            data-dismiss="modal" (click)="updatereward()" [disabled]="rewardPointsInvalid()">Update</button>
+            <button style="float: right;margin-bottom: 20px;margin-top: 30px;" type="button" class="btn btn-danger"
+              data-dismiss="modal" (click)="close()">Close</button>
+            <button style="float: right;margin-bottom: 20px;margin-top: 30px;" type="button" class="btn btn-success"
+              data-dismiss="modal" (click)="updatereward()" [disabled]="rewardPointsInvalid()">Update</button>
+          </div>
         </div>
+
       </div>
 
     </div>
-
   </div>
-</div>

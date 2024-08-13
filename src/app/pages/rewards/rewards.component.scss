@@ -47,3 +47,23 @@
 .plusimage .fa {
   color: white;
 }
+
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.re-search{
+  input{
+    outline: none;
+    border: 0px !important;
+  }
+}

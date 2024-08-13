@@ -1,6 +1,7 @@
 import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { RewardsService } from 'app/service/rewards.service';
 import { SurveyService } from 'app/service/survey.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import swal from 'sweetalert';
 import { ToastrService } from 'ngx-toastr';
 import { ApiService } from 'app/service/api.service';
@@ -12,13 +13,13 @@ import { ApiService } from 'app/service/api.service';
 })
 export class RewardsComponent implements OnInit {
   @ViewChild('fileInput', { static: false }) fileInput!: ElementRef;
-  searchText = '';
+  showFilters: boolean = true;
   base64Images: string[] = [];
   fullName: any = null;
   paymentMethod: any = null;
   phone: any = null;
   points: any = null;
-
+  userForm: FormGroup;
 
   triggerFileInput(): void {
     this.fileInput.nativeElement.click();
@@ -71,18 +72,40 @@ export class RewardsComponent implements OnInit {
 
   constructor(
     public service: RewardsService,
+    private fb: FormBuilder,
     private appService: ApiService,
     private surveyService: SurveyService,
     private toastr: ToastrService
 
   ) {
     this.getAllReward();
+    this.userForm = this.fb.group({
+      fullName: [null],
+      minPoints: [null],
+      maxPoints: [null],
+      paymentMethod: [null],
+      gender: [null],
+      minAge: [null],
+      maxAge: [null],
+      minIncome: [null],
+      maxIncome: [null],
+      status: [null],
+      occupation: [null],
+      maritalStatus: [null]
+    });
   }
 
   ngOnInit() {
 
   }
 
+  clearFullName(): void {
+    this.userForm.patchValue({ fullName: null });
+    this.getAllReward()
+  }
+  showFiltersFnc(): void {
+    this.showFilters = !this.showFilters;
+  }
   close_add() {
     this.reward.name = '',
       this.reward.desc = '',
@@ -137,14 +160,23 @@ export class RewardsComponent implements OnInit {
 
   }
 
-  getAllReward() {
+
+  onSubmit(): void {
     this.loader = true
-    this.surveyService.rewardsList().subscribe(data => {
+    this.surveyService.rewardsList(this.userForm.value).subscribe(data => {
       this.loader = false
       if (data.status == 1) {
-
         this.rewardlist = data.data
-        console.log(this.rewardlist);
+      }
+    })
+  }
+
+  getAllReward(search: any = '') {
+    this.loader = true
+    this.surveyService.rewardsList({ fullName: search }).subscribe(data => {
+      this.loader = false
+      if (data.status == 1) {
+        this.rewardlist = data.data
       }
     })
   }
