@@ -7,6 +7,8 @@ import { countries } from 'app/shared/countries';
 import { SurveyService } from 'app/service/survey.service';
 import { MapsAPILoader } from '@agm/core';
 import { dateNotBeforeToday } from 'app/date.validator';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 
 
@@ -425,4 +427,177 @@ export class SurveyComponent {
     var inputValue = (<HTMLInputElement>document.getElementById("radiusInputField")).value;
     this.radius = parseInt(inputValue);
   }
+  exportDataToExcel(data): void {
+    this.loader = true
+    // data._id = this.router.snapshot.params.id
+        this.service.responseList(data._id).
+        subscribe(data2 => {
+          this.loader = false
+          if (data2.status == 1) {
+            var responsesList = data2.data;
+            console.log(responsesList);
+            console.log(responsesList[0].survey.question[0].answer);
+
+            var jsonData = [
+              { Project_Name: data.projectName, Description:data.desc, Country: data.country, Deadline: data.expirationDate, Points: data.points, Sector: data.sector, Gender: data.selectedGender, "From(Age)":data.filter.from, "To(Age)":data.filter.to, "Exact(Age)":data.filter.exactAge},
+              // { name: 'Jane', age: 25, city: 'Los Angeles' },
+              // { name: 'Doe', age: 40, city: 'Chicago' }
+            ];
+
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonData);
+
+    // // Example: Inserting a title at A1
+    // // XLSX.utils.sheet_add_aoa(worksheet, [['Sample Data']], {origin: 'A1'});
+  
+    // // Example: Inserting a header row at A3
+    // // XLSX.utils.sheet_add_aoa(worksheet, [['Name', 'Age', 'City']], {origin: 'A3'});
+    var colPos = 5;
+    XLSX.utils.sheet_add_aoa(worksheet, [['LOCATIONS']], {origin: 'A'+(colPos)});
+    colPos++;
+    XLSX.utils.sheet_add_aoa(worksheet, [['latitude', 'longitude', 'radius']], {origin: 'B'+(colPos)});
+    colPos++;
+
+    for (let item of data.filter.location) {
+      
+      XLSX.utils.sheet_add_aoa(worksheet, [[item.latitude]], {origin: 'B'+(colPos)});
+      XLSX.utils.sheet_add_aoa(worksheet, [[item.longitude]], {origin: 'C'+(colPos)});
+      XLSX.utils.sheet_add_aoa(worksheet, [[item.radius]], {origin: 'D'+(colPos)});
+      colPos++;
+    }
+
+    colPos++;
+    XLSX.utils.sheet_add_aoa(worksheet, [['QUESTIONS']], {origin: 'A'+(colPos)});
+    colPos++;
+    
+    var qNo = 1;
+    for (let item of data.question) {
+      XLSX.utils.sheet_add_aoa(worksheet, [["Q: "+qNo]], {origin: 'A'+(colPos)});
+      XLSX.utils.sheet_add_aoa(worksheet, [[item.title]], {origin: 'B'+(colPos)});
+      colPos++;
+      if(item.key == "selectOne"){
+        var i=1;
+        for (let item_ of item.options) {
+          XLSX.utils.sheet_add_aoa(worksheet, [["op: "+i++]], {origin: 'B'+(colPos)});
+          XLSX.utils.sheet_add_aoa(worksheet, [[item_.option]], {origin: 'C'+(colPos)});
+          // if(item.answer==item_.option){
+          //   XLSX.utils.sheet_add_aoa(worksheet, [["Selected"]], {origin: 'D'+(colPos)});
+          // }
+          colPos++;
+        }
+        
+      }else if(item.key == "selectMany"){
+        var i=1;
+        for (let item_ of item.options) {
+          XLSX.utils.sheet_add_aoa(worksheet, [["op: "+i++]], {origin: 'B'+(colPos)});
+          XLSX.utils.sheet_add_aoa(worksheet, [[item_.option]], {origin: 'C'+(colPos)});
+          // if(item_.checked){
+          //   XLSX.utils.sheet_add_aoa(worksheet, [["Selected"]], {origin: 'D'+(colPos)});
+          // }
+          colPos++;
+        }
+        
+      }else if(item.key == "photo"){
+        // XLSX.utils.sheet_add_aoa(worksheet, [["ANSWER"]], {origin: 'B'+(colPos)});
+        // XLSX.utils.sheet_add_aoa(worksheet, [[item.img]], {origin: 'C'+(colPos)});
+        // colPos++;
+      }else if(item.key == "location"){
+        // XLSX.utils.sheet_add_aoa(worksheet, [["ANSWER"]], {origin: 'B'+(colPos)});
+        // XLSX.utils.sheet_add_aoa(worksheet, [["lat:"+item.answer[0]+" , long:"+item.answer[1]]], {origin: 'C'+(colPos)});
+        // colPos++;
+      } else{
+        // XLSX.utils.sheet_add_aoa(worksheet, [["ANSWER"]], {origin: 'B'+(colPos)});
+        // XLSX.utils.sheet_add_aoa(worksheet, [[item.answer]], {origin: 'C'+(colPos)});
+        // colPos++;
+      }
+      qNo++;
+      colPos++;
+    }
+
+    qNo=1;
+    var qNoCol=3;
+    console.log("for loop called");
+    console.log(qNo);
+    XLSX.utils.sheet_add_aoa(worksheet, [["S.No"]], {origin: (numberToExcelColumn(1))+(colPos)});
+    XLSX.utils.sheet_add_aoa(worksheet, [["Users"]], {origin: (numberToExcelColumn(2))+(colPos)});
+    for (let item of data.question) {
+      console.log(qNo);
+      console.log(numberToExcelColumn(qNo+1)+(colPos));
+      XLSX.utils.sheet_add_aoa(worksheet, [["Q: "+qNo]], {origin: (numberToExcelColumn(qNoCol))+(colPos)});
+      qNo++;
+      qNoCol++;
+    }
+
+    colPos++;
+
+    console.log("CAlled");
+    console.log(responsesList);
+    // console.log(responsesList[0].user.email);
+    // console.log("CAlled");
+
+    var y = 0;
+    for (var i = 0;i< responsesList.length;i++) {
+      XLSX.utils.sheet_add_aoa(worksheet, [[`${i+1}`]], {origin: (numberToExcelColumn(1))+(colPos)});
+      XLSX.utils.sheet_add_aoa(worksheet, [[responsesList[i].user.email]], {origin: (numberToExcelColumn(2))+(colPos)});
+      for (var j = 0;j< responsesList[i].survey.question.length;j++) {
+        if(responsesList[i].survey.question[j].key == "selectMany"){
+          var answer="";
+          for (var k = 0;k< responsesList[i].survey.question[j].answer.length;k++){
+            if(k!=0){
+              answer = answer+", "+responsesList[i].survey.question[j].answer[k];
+            }else{
+              answer = responsesList[i].survey.question[j].answer[k];
+            }
+          }
+          XLSX.utils.sheet_add_aoa(worksheet, [[answer]], {origin: (numberToExcelColumn(j+3))+(colPos)});
+        }else if(responsesList[i].survey.question[j].key == "photo"){
+          XLSX.utils.sheet_add_aoa(worksheet, [[responsesList[i].survey.question[j].img]], {origin: (numberToExcelColumn(j+3))+(colPos)});
+        }else if(responsesList[i].survey.question[j].key == "location"){
+          XLSX.utils.sheet_add_aoa(worksheet, [["lat:"+responsesList[i].survey.question[j].answer[0]+" , long:"+responsesList[i].survey.question[j].answer[1]]], {origin: (numberToExcelColumn(j+3))+(colPos)});
+        }else{
+          XLSX.utils.sheet_add_aoa(worksheet, [[responsesList[i].survey.question[j].answer]], {origin: (numberToExcelColumn(j+3))+(colPos)});
+        }
+        
+      }
+      colPos++;
+      
+    }
+
+
+
+    const range = XLSX.utils.decode_range(worksheet['!ref']);
+    
+
+    const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    this.saveAsExcelFile(excelBuffer, 'sample');
+
+
+          }
+        })
+    
+  }
+
+  private saveAsExcelFile(buffer: any, fileName: string): void {
+    const data: Blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    saveAs(data, fileName + '_export_' + new Date().getTime() + '.xlsx');
+  }
+
+  
+}
+
+function numberToExcelColumn(number: number): string {
+  if (number <= 0) {
+    throw new Error("Number must be a positive integer.");
+  }
+
+  let columnLabel = "";
+  
+  while (number > 0) {
+    number--; // Adjust for 1-based indexing
+    let remainder = number % 26;
+    columnLabel = String.fromCharCode(65 + remainder) + columnLabel;
+    number = Math.floor(number / 26);
+  }
+
+  return columnLabel;
 }
