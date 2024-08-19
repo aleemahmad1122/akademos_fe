@@ -72,9 +72,10 @@
                                     <td *ngIf="data.desc==''">-</td>
                                     <td *ngIf="data.desc!=''">{{data.surveyCount}}</td>
                                     <td *ngIf="data.desc==''">-</td>
-                                    <td><button [routerLink]="['/user-response/'+ data._id]"
-                                            class="btn btn-success btn-sm"
-                                            style="background-color: #28a745;">Responses</button></td>
+                                    <td><button [routerLink]="['/user-response/'+ data._id]" class="btn btn-success btn-sm" style="background-color: #28a745;">Responses</button>
+                                        <br><br>
+                                        <button (click)="exportDataToExcel(data)" class="btn btn-success btn-sm" style="background-color: #008cff;">Download</button>
+                                    </td>
                                     <td>{{data.createdAt | date: 'short'}}</td>
                                     <td>
                                         <h6 *ngIf="data.status==1" class="text-success">Active</h6>
