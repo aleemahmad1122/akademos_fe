@@ -30,7 +30,7 @@ import { ApiService } from 'app/service/api.service';
 `
 
 
-]
+  ]
 })
 
 export class DashboardComponent implements OnInit {
@@ -53,12 +53,15 @@ export class DashboardComponent implements OnInit {
   userResponsesList = '0'
   libraryList = '0'
 
-
+  isAdmin: boolean = false;
 
   constructor(
     private userservice: ApiService,
 
   ) {
+
+    this.isAdmin = JSON.parse(localStorage.getItem("admin")).role == "admin";
+
 
     // this.getusercount();
     // this.getAllAdmin();
