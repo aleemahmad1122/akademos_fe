@@ -12,9 +12,13 @@
               <input class="form-control" type="text" name="search" style="height: 37px;" [(ngModel)]="searchText"
                 autocomplete="off" placeholder="Search by user name, user phone or anything...">
             </div>
+
             <button type="button" class="btn btn-success float-right" data-toggle="modal" data-target="#addModal"
               data-backdrop="static">Add user</button>
 
+            <button class="btn btn-success mx-4 " (click)="downloadAllUser()" style="background-color: #28a745;">
+              Download
+              All</button>
           </div>
 
         </div>
@@ -30,7 +34,6 @@
               <thead>
 
                 <th>#</th>
-                <th>Image</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Download</th>
@@ -45,13 +48,6 @@
                 <tr>
                   <td>{{i+1}}</td>
 
-                  <td>
-                    <img *ngIf="data.image!=''&& data.image!=null" src="{{service.url+data.image}}" alt=""
-                      style="width: 70px;height: 70px; border-radius: 9px;">
-                    <img *ngIf="data.image=='' || data.image==null" src="assets/images/thumbnail.png" alt=""
-                      style="width: 70px;height: 70px; border-radius: 9px;">
-
-                  </td>
                   <td *ngIf="data.firstName!=''">{{data.firstName}}</td>
                   <td *ngIf="data.name==''">-</td>
                   <td *ngIf="data.email!=''">{{data.email}}</td>

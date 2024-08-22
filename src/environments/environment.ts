@@ -8,7 +8,7 @@ export const environment = {
 
 
   // url: 'http://5.2.68.47:3000/',
-  url: 'http://141.136.35.18/api/',
+  url: 'http://localhost:3000/',
   // url: 'http://localhost:3000/',
   google_api_key: "AIzaSyCi9gTRuMHizdvuAADZ8gd42B39MYCAQfI",
 

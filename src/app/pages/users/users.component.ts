@@ -232,4 +232,21 @@ export class UsersComponent implements OnInit {
 
   }
 
+  downloadAllUser() {
+    this.service.downloadAll().subscribe(res => {
+      console.log(res)
+      const blob = new Blob([res], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = 'users.xlsx';
+      link.click();
+
+    }, (error) => {
+      this.toastr.error(error, 'Error', {
+        positionClass: 'toast-bottom-right'
+      });
+    })
+
+  }
+
 }

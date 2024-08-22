@@ -36,7 +36,7 @@ import { environment } from "environments/environment";
     HttpClientModule,
     CommonModule,
     BrowserAnimationsModule,
-    ToastrModule.forRoot(), 
+    ToastrModule.forRoot(),
     DragulaModule.forRoot(),
     RouterModule.forRoot(AppRoutes, {
       useHash: true
@@ -63,7 +63,7 @@ import { environment } from "environments/environment";
       useClass: TokenInterceptorService,
       multi: true
     }],
-    
+
   bootstrap: [AppComponent]
 })
 export class AppModule {

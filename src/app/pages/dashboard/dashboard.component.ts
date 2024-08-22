@@ -264,14 +264,14 @@ export class DashboardComponent implements OnInit {
     // });
   }
   getonlyusers() {
-    this.userservice.allCounts().subscribe(data => {
-      if (data.status == 1) {
+    this.userservice.allCounts().subscribe(_ => {
+      if (_.status == 1) {
 
-        this.adminList = data.admin;
-        this.userList = data.user;
-        this.surveyList = data.survey;
-        this.userResponsesList = data.userResponses;
-        this.libraryList = data.library;
+        this.adminList = _.admin;
+        this.userList = _.user;
+        this.surveyList = _.survey;
+        this.userResponsesList = _.userResponses;
+        this.libraryList = _.library;
 
 
         // this.menuInActiveList = data.menuInActive;

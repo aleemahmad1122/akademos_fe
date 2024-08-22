@@ -57,7 +57,10 @@ export class ApiService {
     return this.http.get(this.url + 'user/allusers')
   }
   download(id): Observable<any> {
-    return this.http.get(this.url + 'user/download/' + id,{responseType: 'blob'})
+    return this.http.get(this.url + 'user/download/' + id, { responseType: 'blob' })
+  }
+  downloadAll(): Observable<any> {
+    return this.http.get(this.url + 'user/download-all', { responseType: 'blob' })
   }
 
 

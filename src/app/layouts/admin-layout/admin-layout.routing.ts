@@ -13,6 +13,7 @@ import { LibrarydetailComponent } from 'app/pages/librarydetail/librarydetail.co
 import { UserresponseComponent } from 'app/pages/user-response/user-response.component';
 import { UsersingleresponseComponent } from 'app/pages/user-single-response/user-single-response.component';
 import { RewardsComponent } from 'app/pages/rewards/rewards.component';
+import { RewardsRequestsComponent } from 'app/pages/rewards-requests/rewards-requests.component';
 
 export const AdminLayoutRoutes: Routes = [
   { path: 'dashboard', component: DashboardComponent },
@@ -20,6 +21,7 @@ export const AdminLayoutRoutes: Routes = [
   // { path: 'allusers', component: UserlistComponent },
   { path: 'admin', component: AdminComponent },
   { path: 'rewards', component: RewardsComponent },
+  { path: 'reward-requests', component: RewardsRequestsComponent },
   { path: 'users', component: UsersComponent },
   { path: 'survey', component: SurveyComponent },
   { path: 'user-response/:id', component: UserresponseComponent },

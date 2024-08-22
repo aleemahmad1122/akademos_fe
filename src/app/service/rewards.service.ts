@@ -15,7 +15,9 @@ export class RewardsService {
     return this.http.get(this.url + 'reward/allReward')
   }
 
-  addReward(data): Observable<any> {
+  addReward(data: any): Observable<any> {
+    console.log(data);
+
     return this.http.post(this.url + 'reward/create', data)
   }
   updateReward(id, data): Observable<any> {
@@ -23,6 +25,6 @@ export class RewardsService {
   }
 
   deleteReward(id): Observable<any> {
-    return this.http.get(this.url + 'reward/delete/' + id)
+    return this.http.delete(this.url + 'reward/delete/' + id)
   }
 }

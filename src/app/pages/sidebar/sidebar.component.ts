@@ -14,8 +14,9 @@ export const ROUTES: RouteInfo[] = [
   { path: '/user-response/id', title: 'User responses', icon: 'nc-mobile', class: '' },
   { path: '/library', title: 'Library', icon: 'nc-bookmark-2', class: '' },
   { path: '/rewards', title: 'Rewards', icon: 'nc-bookmark-2', class: '' },
+  { path: '/reward-requests', title: 'Reward Requests', icon: 'nc-bookmark-2', class: '' },
   { path: '/notification', title: 'Send Notifications', icon: 'nc-bell-55', class: '' },
-  { path: '/settings', title: 'Settings', icon: 'nc-settings', class: '' },
+  // { path: '/settings', title: 'Settings', icon: 'nc-settings', class: '' },
 
 ];
 
@@ -36,8 +37,9 @@ export class SidebarComponent implements OnInit {
     { path: '/user-response/id', title: 'User responses', icon: 'nc-mobile', class: '', isAdmin: ["user", "admin"].includes(this.role) },
     { path: '/library', title: 'Library', icon: 'nc-bookmark-2', class: '', isAdmin: ["admin"].includes(this.role) },
     { path: '/rewards', title: 'Rewards', icon: 'nc-trophy', class: '', isAdmin: ["admin"].includes(this.role) },
+    { path: '/reward-requests', title: 'Reward Requests', icon: 'nc-money-coins ', class: '', isAdmin: ["admin"].includes(this.role) },
     { path: '/notification', title: 'Send Notifications', icon: 'nc-bell-55', class: '', isAdmin: ["admin"].includes(this.role) },
-    { path: '/settings', title: 'Settings', icon: 'nc-settings', class: '', isAdmin: ["admin"].includes(this.role) },
+    // { path: '/settings', title: 'Settings', icon: 'nc-settings', class: '', isAdmin: ["admin"].includes(this.role) },
 
   ];
 

@@ -32,6 +32,7 @@ import { UserresponseComponent } from 'app/pages/user-response/user-response.com
 import { UsersingleresponseComponent } from 'app/pages/user-single-response/user-single-response.component';
 import { RewardsComponent } from 'app/pages/rewards/rewards.component';
 import { environment } from 'environments/environment';
+import { RewardsRequestsComponent } from 'app/pages/rewards-requests/rewards-requests.component';
 
 
 @NgModule({
@@ -73,7 +74,8 @@ import { environment } from 'environments/environment';
     UserresponseComponent,
     UsersingleresponseComponent,
     RewardsComponent,
-    ],
+    RewardsRequestsComponent
+  ],
 
 
 })

@@ -72,9 +72,12 @@
                                     <td *ngIf="data.desc==''">-</td>
                                     <td *ngIf="data.desc!=''">{{data.surveyCount}}</td>
                                     <td *ngIf="data.desc==''">-</td>
-                                    <td><button [routerLink]="['/user-response/'+ data._id]" class="btn btn-success btn-sm" style="background-color: #28a745;">Responses</button>
+                                    <td><button [routerLink]="['/user-response/'+ data._id]"
+                                            class="btn btn-success btn-sm"
+                                            style="background-color: #28a745;">Responses</button>
                                         <br><br>
-                                        <button (click)="exportDataToExcel(data)" class="btn btn-success btn-sm" style="background-color: #008cff;">Download</button>
+                                        <button (click)="exportDataToExcel(data)" class="btn btn-success btn-sm"
+                                            style="background-color: #008cff;">Download</button>
                                     </td>
                                     <td>{{data.createdAt | date: 'short'}}</td>
                                     <td>
@@ -159,6 +162,39 @@
                                 <input formControlName="desc" style="margin-bottom: 10px;" type="text"
                                     class="form-control" placeholder="Description">
                             </div>
+
+                            <div class="col-md-12">
+                                <label for="name">Occupation</label>
+                                <input formControlName="occupation" style="margin-bottom: 10px;" type="text"
+                                    class="form-control" placeholder="Occupation">
+                            </div>
+
+                            <div class="col-md-12">
+                                <label for="maritalStatus" class="form-label">Marital Status</label>
+                                <select id="maritalStatus" class="form-select" formControlName="maritalStatus">
+                                    <option value="">Select marital status</option>
+                                    <option value="single">Single</option>
+                                    <option value="married">Married</option>
+                                    <option value="divorced">Divorced</option>
+                                    <option value="widowed">Widowed</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-12">
+                                <label for="minIncome" class="form-label">Minimum Income</label>
+                                <input type="number" class="form-control" id="minIncome" formControlName="minIncome"
+                                    placeholder="Enter minimum income">
+                            </div>
+
+                            <div class="col-md-12">
+                                <label for="maxIncome" class="form-label">Maximum Income</label>
+                                <input type="number" class="form-control" id="maxIncome" formControlName="maxIncome"
+                                    placeholder="Enter maximum income">
+                            </div>
+
+
+
                             <div class="col-md-12">
                                 <label for="name">Survey Points</label>
                                 <input id="pointsInputField" [formControl]="pointsInput" formControlName="points"
